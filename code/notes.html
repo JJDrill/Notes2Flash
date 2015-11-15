@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Notes2Flash</title>
+
+    <!-- Bootstrap -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://bootswatch.com/spacelab/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./style/main.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <!-- <a class="navbar-brand" href="#">Brand</a> -->
+            <a class="navbar-brand" href="#">
+              <img alt="Brand" src="http://lorempixel.com/30/30/abstract/">
+            </a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="./account">Account</a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </header>
+    <main>
+      <div class="row">
+        <!-- Notebook/Notes tree -->
+        <div class="col-md-2">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Notebooks/Notes</h3>
+            </div>
+            <div class="panel-body">
+              Panel content
+            </div>
+          </div>
+        </div>
+        <!-- Note/Flash Card edit area -->
+        <div class="col-md-10">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Notes Name</h3>
+            </div>
+            <div class="panel-body">
+               <form>
+                 <textarea class="notesTextArea" name="notesText" style="width:100%; height:100px">
+                   <p>test!</p>
+                   <ul>
+                   <li>test!</li>
+                   </ul>
+                   <p>test!</p>
+                   <p>test!</p>
+                   <p>test!</p>
+                   <p>test!</p>
+                 </textarea>
+                 <!-- <input class="btnSaveNotes" type="submit" value="Save Notes"> -->
+                 <button class="btnSaveNotes" type="button" name="saveNotes">Save Notes</button>
+               </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- TinyMCE rich text editor -->
+    <script src="./tinymce/tinymce.min.js"></script>
+    <script>tinymce.init({selector:'textarea'});</script>
+    <script type="text/javascript" src="./scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="./scripts/notes.js"></script>
+  </body>
+</html>
