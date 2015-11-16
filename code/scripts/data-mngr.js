@@ -1,14 +1,64 @@
 var Notebook_Mngr = function() {
+  var dbCode_Notebooks = 'NB';
+  var dbCode_Notes = 'NT';
+
+  /*
+  Defines the notebook object
+  */
+  this.objNotebook = function() {
+    this.notebook_id = "";
+    this.notebook_name = "";
+  }
 
   /*
   Defines the note object
   */
-  this.objNote = function(notebook_name, note_name) {
-    var flashCards = [];
-    this.notebookName = notebook_name;
-    this.noteName = note_name;
+  this.objNote = function() {
+    this.noteId = "";
+    this.refNotebookId = "";
+    this.noteName = "";
     this.notes = "";
-    this.generateFlashCards = function(){}
+    var flashCards = [];
+  }
+
+  this.DB_Get_Notebook = function() {
+
+  }
+
+  this.DB_Get_Full_List = function() {
+    var return_array = []
+    for (var i = 0; i < localStorage.length; i++) {
+      // get the key and value to work with
+      var key = localStorage.key([i]);
+      var value = localStorage.getItem(localStorage.key([i]));
+      value = JSON.parse(value);
+
+      if (key.substring(0,dbCode_Notebooks.length) === dbCode_Notebooks) {
+        var newNotebook = new this.objNotebook()
+        newNotebook.notebook_id = value.notebook_id;
+        newNotebook.notebook_name = value.notebook_name;
+        return_array.push(newNotebook);
+
+      } else if (key.substring(0,dbCode_Notes.length) === dbCode_Notes) {
+        var newNote = new this.objNote()
+        newNote.noteId = value.noteId;
+        newNote.refNotebookId = value.refNotebookId;
+        newNote.noteName = value.noteName;
+        newNote.notes = value.notes;
+        return_array.push(newNote);
+      }
+    }
+    return return_array
+  }
+
+  this.DB_Save_Notebook = function(notebook) {
+    if (!(notebook instanceof this.objNotebook)) {
+      console.log("Object passed in is not of type objNotebook.");
+      return false;
+    }
+
+    var string_to_save = JSON.stringify(notebook)
+    localStorage.setItem(notebook.notebook_id, string_to_save)
   }
 
   /*
@@ -27,9 +77,8 @@ var Notebook_Mngr = function() {
       return false;
     }
 
-    var myKey = pGenerateNoteKey(note_to_save)
     var string_to_save = JSON.stringify(note_to_save)
-    localStorage.setItem(myKey, string_to_save)
+    localStorage.setItem(note_to_save.noteId, string_to_save)
   };
 
   /*

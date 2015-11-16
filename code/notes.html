@@ -46,10 +46,10 @@
         <div class="col-md-2">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Notebooks/Notes</h3>
+              <h3 class="panel-title">Notebooks</h3>
             </div>
             <div class="panel-body">
-              Panel content
+              <div id="jstree_demo_div"></div>
             </div>
           </div>
         </div>
@@ -72,7 +72,8 @@
                    <p>test!</p>
                  </textarea>
                  <!-- <input class="btnSaveNotes" type="submit" value="Save Notes"> -->
-                 <button class="btnSaveNotes" type="button" name="saveNotes">Save Notes</button>
+                 <button class="btnSaveNotes" type="button" name="saveNotes">Save</button>
+                 <button class="btnSaveNotesAs" type="button" name="saveNotes">Save As...</button>
                </form>
             </div>
           </div>
@@ -90,5 +91,8 @@
     <script type="text/javascript" src="./scripts/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="./scripts/notes.js"></script>
     <script type="text/javascript" src="./scripts/data-mngr.js"></script>
+    <!-- JTree -->
+    <link rel="stylesheet" href="./jstree/themes/default/style.min.css" />
+    <script src="./jstree/jstree.min.js"></script>
   </body>
 </html>
