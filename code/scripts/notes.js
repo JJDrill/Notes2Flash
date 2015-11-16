@@ -1,5 +1,4 @@
 $(function(){
-
   /*
   Get all the content from the note text area
   */
@@ -24,10 +23,8 @@ $(function(){
     } else {
       var fullString = ''
       for (var i = 0; i < content.length; i++) {
-        console.log('TEST: ' + content[i]);
         fullString += content[i]
       }
-      console.log(fullString);
       tinymce.activeEditor.setContent(fullString)
     }
 
@@ -60,7 +57,7 @@ $(function(){
       var lineElements = $(notesArray[i])
 
       if (lineElements.length != 0) {
-        
+
         if ($(lineElements[0]).hasClass('highlightQuestion')) {
           $(lineElements[0]).removeClass('highlightQuestion')
         } else if ($(lineElements[0]).hasClass('highlightAnswer')) {
@@ -81,10 +78,20 @@ $(function(){
     Highlight_Notes(0, 'question')
     Highlight_Notes(2, 'answer')
     Highlight_Notes(4, 'answer')
+
+    notebookMngr.DB_Save_Note(myNote)
   })
 
   $('.btnSaveNotes').on('dblclick', function() {
     Unhighlight_All_Notes();
+
+    notebookMngr.DB_Delete_Note(myNote)
   })
+
+
+
+  var notebookMngr = new Notebook_Mngr();
+  var myNote = new notebookMngr.objNote("Book 1", "Note 1");
+  myNote.notes = "My big long notes!!!!";
 
 });
