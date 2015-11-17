@@ -163,27 +163,31 @@ console.log(Get_Notes('string'));
   var notebookMngr = new Notebook_Mngr();
   var currentSelectedNodeID = "";
 
-  // var myBook1 = new notebookMngr.objNotebook();
-  // myBook1.notebook_id = "NB0";
-  // myBook1.notebook_name = "Book 1";
-  // notebookMngr.DB_Save_Notebook(myBook1)
-  //
-  // var myNote = new notebookMngr.objNote();
-  // myNote.noteId = "N0";
-  // myNote.refNotebookId = "NB0";
-  // myNote.noteName = "Note 1";
-  // myNote.notes = "My big long notes!!!!";
-  // notebookMngr.DB_Save_Note(myNote)
-  //
-  // var myNote1 = new notebookMngr.objNote();
-  // myNote1.noteId = "N1";
-  // myNote1.refNotebookId = "NB0";
-  // myNote1.noteName = "Note 2";
-  // myNote1.notes = "My big long notes!!!!";
-  // notebookMngr.DB_Save_Note(myNote1)
+  /*
+  Insert some test data if they have an empty local storage
+  */
+  if (localStorage.length === 0) {
+    console.log("temp data instereted");
+    var myBook1 = new notebookMngr.objNotebook();
+    myBook1.notebook_id = "NB0";
+    myBook1.notebook_name = "Book 1";
+    notebookMngr.DB_Save_Notebook(myBook1)
+
+    var myNote = new notebookMngr.objNote();
+    myNote.noteId = "NT0";
+    myNote.refNotebookId = "NB0";
+    myNote.noteName = "Note 1";
+    myNote.notes = "Test note data";
+    notebookMngr.DB_Save_Note(myNote)
+
+    var myNote1 = new notebookMngr.objNote();
+    myNote1.noteId = "NT1";
+    myNote1.refNotebookId = "NB0";
+    myNote1.noteName = "Note 2";
+    myNote1.notes = "Test note data 2";
+    notebookMngr.DB_Save_Note(myNote1)
+  }
 
   var fullList = notebookMngr.DB_Get_Full_List();
   Update_Tree(fullList)
-  console.log(fullList);
-
 });
