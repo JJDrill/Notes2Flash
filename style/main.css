@@ -1,0 +1,10 @@
+.flashCardPanel {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flashCard {
+  width: 50%;
+  height: 100px;
+  border: 1px solid;
+}

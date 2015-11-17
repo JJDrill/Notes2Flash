@@ -72,14 +72,33 @@
         </div>
 
         <!-- Flash Note Edit Area -->
-        <button class="btn btn-default btn-xs" type="button" name="btnFlashCollapse">Flash Cards</button>
-        <div class="col-md-9">
+        <div class="col-md-9 flashCardPanel">
           <div class="panel panel-default">
             <!-- <div class="panel-heading">
               <h3 class="panel-title">Flash Edit</h3>
             </div> -->
-            <div class="panel-body collapse">
+            <button class="btn btn-default btn-xs btnFlashCardEdit" type="button" name="btnFlashCollapse">Flash Cards</button>
+            <div class="row panel-body collapse flashCardEditPanel">
+
+              <div class="col-md-1">
+                <button class="btn btn-default btn-xs" type="button" name="btnFlashCardPrevious">&lt;</button>
+              </div>
+              <div class="col-md-4">
+                <!-- Question Panel -->
+                <div class="flashCard">Question</div>
+              </div>
+              <div class="col-md-4">
+                <!-- Answer Panel -->
+                <div class="flashCard">Answer</div>
+              </div>
+              <div class="col-md-1">
+                <button class="btn btn-default btn-xs" type="button" name="btnFlashCardForward">&gt;</button>
+              </div>
             </div>
+
+            <!-- <div class="panel-body collapse flashCardEditPanel">
+
+            </div> -->
           </div>
         </div>
 

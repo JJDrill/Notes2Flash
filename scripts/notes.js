@@ -144,25 +144,33 @@ console.log(dataArray);
   /*
   Save the notes when the user clicks the save button
   */
-  $('.btnSaveNotes').on('click', function() {
-    var myNotes = Get_Notes('string')
-    Highlight_Notes(0, 'question')
-    Highlight_Notes(2, 'answer')
-    Highlight_Notes(4, 'answer')
+  // $('.btnSaveNotes').on('click', function() {
+  //   var myNotes = Get_Notes('string')
+  //   Highlight_Notes(0, 'question')
+  //   Highlight_Notes(2, 'answer')
+  //   Highlight_Notes(4, 'answer')
+  //
+  //   notebookMngr.DB_Save_Note(myNote)
+  // })
 
-    notebookMngr.DB_Save_Note(myNote)
+  $('.btnFlashCardEdit').on('click', function() {
+    if ($('.flashCardEditPanel').hasClass('collapse')) {
+      $('.flashCardEditPanel').removeClass('collapse')
+    } else {
+      $('.flashCardEditPanel').addClass('collapse')
+    }
   })
 
-  $('.btnSaveNotes').on('dblclick', function() {
-    Unhighlight_All_Notes();
-
-    notebookMngr.DB_Delete_Note(myNote)
-  })
-
-  $('.btnSaveNotesAs').on('click', function() {
-    // get the currently selected notebook in the tree
-    var selected = $('#jstree_demo_div').jstree('get_selected')
-  })
+  // $('.btnSaveNotes').on('dblclick', function() {
+  //   Unhighlight_All_Notes();
+  //
+  //   notebookMngr.DB_Delete_Note(myNote)
+  // })
+  //
+  // $('.btnSaveNotesAs').on('click', function() {
+  //   // get the currently selected notebook in the tree
+  //   var selected = $('#jstree_demo_div').jstree('get_selected')
+  // })
 
   $('#jstree_demo_div').on("changed.jstree", function (e, data) {
 
