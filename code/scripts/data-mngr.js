@@ -65,7 +65,15 @@ var Notebook_Mngr = function() {
   Retrieves a note from storage
   */
   this.DB_Get_Note = function(note_key) {
-    return JSON.parse( localStorage.getItem(note_key) )
+    var dataToCopy = JSON.parse( localStorage.getItem(note_key) )
+
+    var returnItem = new this.objNote();
+    returnItem.noteId = dataToCopy.noteId;
+    returnItem.refNotebookId = dataToCopy.refNotebookId;
+    returnItem.noteName = dataToCopy.noteName;
+    returnItem.notes = dataToCopy.notes;
+    returnItem.flashCards = dataToCopy.flashCards;
+    return returnItem;
   };
 
   /*

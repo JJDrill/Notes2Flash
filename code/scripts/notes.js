@@ -27,7 +27,6 @@ $(function(){
       }
       tinymce.activeEditor.setContent(fullString)
     }
-
   }
 
   /*
@@ -134,27 +133,35 @@ $(function(){
   $('.btnSaveNotesAs').on('click', function() {
     // get the currently selected notebook in the tree
     var selected = $('#jstree_demo_div').jstree('get_selected')
-  console.log(selected);
   })
 
   $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-    //console.log(data);
-    //console.log(e);
+//console.log(data);
+//console.log(e);
     if (data.action === 'select_node') {
       //check if it's a note, if it is open it!
       if (data.selected[0].substring(0,2) === "NT") {
-        console.log('open the note!!!!!');
+        //save the content first if the node changed
+        if (currentSelectedNodeID !== data.selected[0] &&
+            currentSelectedNodeID !== "") {
+console.log('here!!!!!!!!!!!!!!' + currentSelectedNodeID);
+          var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
+console.log(Get_Notes('string'));
+          noteToUpdate.notes = Get_Notes('string');
+          notebookMngr.DB_Save_Note(noteToUpdate)
+        }
+
+        var noteToOpen = notebookMngr.DB_Get_Note(data.selected[0])
+  //console.log(data.selected[0]);
+        Put_Notes(noteToOpen.notes)
+        currentSelectedNodeID = data.selected[0];
       }
     }
   });
 
-  $('#jstree_demo_div').on("dblclick.jstree", function (e, data) {
-    console.log('double!!!');
-
-  });
-
 
   var notebookMngr = new Notebook_Mngr();
+  var currentSelectedNodeID = "";
 
   // var myBook1 = new notebookMngr.objNotebook();
   // myBook1.notebook_id = "NB0";
