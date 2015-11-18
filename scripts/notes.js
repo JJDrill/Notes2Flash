@@ -296,6 +296,7 @@ console.log(currentNodeFlashArray);
 
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
+  var mngrDictionary = new Dictionary_Mngr();
   var currentSelectedNodeID = "";
   var currentNodeFlashArray = [];
   var currentNodeFlashIndex = 0;
@@ -333,4 +334,6 @@ console.log(currentNodeFlashArray);
 
   var fullList = notebookMngr.DB_Get_Full_List();
   Update_Tree(fullList)
+
+  mngrDictionary.Get_Definition('testing')
 });
