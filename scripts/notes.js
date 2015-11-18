@@ -293,6 +293,19 @@ console.log(currentNodeFlashArray);
     }
   });
 
+  $('.btnDefinition').on('click', function() {
+    var wordToLookup = tinymce.activeEditor.selection.getContent();
+    mngrDictionary.Get_Definition(wordToLookup, function(data){
+      var fullDefinitionResponse = wordToLookup + " : "
+
+      for (var i = 0; i < data.definitions.length; i++) {
+        fullDefinitionResponse += data.definitions[i].text + " / "
+      }
+      tinymce.activeEditor.selection.setContent(fullDefinitionResponse);
+    });
+
+  });
+
 
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
@@ -334,6 +347,4 @@ console.log(currentNodeFlashArray);
 
   var fullList = notebookMngr.DB_Get_Full_List();
   Update_Tree(fullList)
-
-  mngrDictionary.Get_Definition('testing')
 });
