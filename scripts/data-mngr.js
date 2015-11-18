@@ -73,6 +73,14 @@ var Notebook_Mngr = function() {
   };
 
   /*
+  Returns the current flash card array for a note
+  */
+  this.DB_Get_Note_Flash_Cards = function(note_key) {
+    var myNote = this.DB_Get_Note(note_key);
+    return myNote.flashCards;
+  }
+
+  /*
   Saves a new note into storage, or updates the note
   */
   this.DB_Save_Note = function(note_to_save) {
@@ -81,7 +89,7 @@ var Notebook_Mngr = function() {
       return false;
     }
 
-    this.Generate_Flash_Cards(note_to_save)
+    Generate_Flash_Cards(note_to_save)
 
     var string_to_save = JSON.stringify(note_to_save)
     localStorage.setItem(note_to_save.noteId, string_to_save)
@@ -103,7 +111,7 @@ var Notebook_Mngr = function() {
   /*
   Generates the flash card objects for a note
   */
-  this.Generate_Flash_Cards = function(note) {
+  var Generate_Flash_Cards = function(note) {
     var contentArray = note.notes.split('\n')
     var flashArray = [];
     var tabIndex = 0;
@@ -130,9 +138,6 @@ var Notebook_Mngr = function() {
       flashArray.push(newAnswerObj);
 
       if ( pIsIgnoredForFlash( newAnswerObj.lineContent ) ) {
-      // if (newAnswerObj.lineContent === "<ul>"  ||
-      //     newAnswerObj.lineContent === "</ul>"  ||
-      //     newAnswerObj.lineContent === "<p>&nbsp;</p>") {
         continue;
       }
 
@@ -144,10 +149,7 @@ var Notebook_Mngr = function() {
         // check if the line is something we need to ignore
         if ( pIsIgnoredForFlash( flashArray[flashIndex].lineContent ) ) {
           continue;
-
         } else {
-          console.log(flashArray[flashIndex].lineContent);
-          //debugger;
           if (flashArray[flashIndex].tabIndex === newAnswerObj.tabIndex - 1) {
             flashArray[flashIndex].answers.push(newAnswerObj.lineContent)
             break;
@@ -155,8 +157,6 @@ var Notebook_Mngr = function() {
         }
       }
     }
-
-    console.log(flashArray);
 
     //now go through and clean up the fragmented array
     var fullLength = flashArray.length;
@@ -166,7 +166,8 @@ var Notebook_Mngr = function() {
       }
     }
 
-    console.log(flashArray);
+    // Set the updated flash card array to our note object
+    note.flashCards = flashArray;
   }
 
   /*
@@ -182,18 +183,6 @@ var Notebook_Mngr = function() {
     } else {
       return false;
     }
-  }
-
-  /*
-  Private
-  Used to generate the key for local storage
-  */
-  var pGenerateNoteKey = function(aNote) {
-
-    return  "NB:" +
-            aNote.notebookName.toLowerCase().replace(" ", "") +
-            ":" +
-            aNote.noteName.toLowerCase().replace(" ", "")
   }
 
 }

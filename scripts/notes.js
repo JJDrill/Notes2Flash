@@ -120,8 +120,6 @@ $(function(){
         dataArray.push(newItem)
       }
     }
-var temp = [];
-console.log(dataArray);
 
     $('#jstree_demo_div').jstree('deselect_all');
     $('#jstree_demo_div').jstree({ 'core' : {
@@ -156,6 +154,21 @@ console.log(dataArray);
   $('.btnFlashCardEdit').on('click', function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
+
+      // Save the current notes
+
+      // Populate our current flash card array
+      var currentSelectedNodeFlashArray = notebookMngr.DB_Get_Note_Flash_Cards(currentSelectedNodeID)
+
+      //set the cards to display the first in the array
+      if (currentSelectedNodeFlashArray.length > 0) {
+        $('.flashQuestion')[0].textContent = currentSelectedNodeFlashArray[0].lineContent;
+
+        for (var i = 0; i < currentSelectedNodeFlashArray[0].answers.length; i++) {
+          $('.flashAnswer')[0].textContent = currentSelectedNodeFlashArray[0].answers[i];
+        }
+      }
+
     } else {
       $('.flashCardEditPanel').addClass('collapse')
     }
@@ -206,8 +219,6 @@ console.log(dataArray);
 
       // check if the user clicked on the new note node
       } else if (data.selected[0].substring(0,NEW_NOTE_ID.length) === NEW_NOTE_ID) {
-// console.log(data);
-// console.log(e);
         var newNotebookName = prompt("Please enter the new note name", "New Note");
         if (newNotebookName != null) {
           var newNote = new notebookMngr.objNote();
@@ -229,6 +240,7 @@ console.log(dataArray);
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
   var currentSelectedNodeID = "";
+  var currentSelectedNodeFlashArray = [];
 
   /*
   Insert some test data if they have an empty local storage
