@@ -151,6 +151,54 @@ $(function(){
   //   notebookMngr.DB_Save_Note(myNote)
   // })
 
+  Navigate_Flash_Cards = function(direction) {
+    // do nothing if the flash card array isn't populated
+    //debugger;
+    if (currentNodeFlashArray.length === 0) {
+      return;
+    }
+
+    // handle the index modification first
+    if ('first' === direction) {
+      currentNodeFlashIndex = 0;
+
+    } else if ('next' === direction) {
+      if (currentNodeFlashIndex < currentNodeFlashArray.length-1) {
+        currentNodeFlashIndex += 1;
+      }
+
+    } else if ('previous' === direction) {
+      if (currentNodeFlashIndex > 0) {
+        currentNodeFlashIndex -= 1;
+      }
+
+    } else if ('last' === direction) {
+      currentNodeFlashIndex = currentNodeFlashArray.length;
+
+    } else {
+      console.log('ERROR: Invalid flash card direction.');
+    }
+
+    // set the cards to display the index
+    $('.flashQuestion')[0].textContent = currentNodeFlashArray[currentNodeFlashIndex].lineContent;
+
+    for (var i = 0; i < currentNodeFlashArray[0].answers.length; i++) {
+      $('.flashAnswer')[0].textContent = currentNodeFlashArray[currentNodeFlashIndex].answers[i];
+    }
+
+    // enable/disable the forward and back buttons accordingly
+    if (currentNodeFlashIndex === 0) {
+      $('button[name=btnFlashCardPrevious]').prop('disabled', true)
+      $('button[name=btnFlashCardForward]').prop('disabled', false)
+    } else if (currentNodeFlashIndex >= currentNodeFlashArray.length-1) {
+      $('button[name=btnFlashCardPrevious]').prop('disabled', false)
+      $('button[name=btnFlashCardForward]').prop('disabled', true)
+    } else {
+      $('button[name=btnFlashCardPrevious]').prop('disabled', false)
+      $('button[name=btnFlashCardForward]').prop('disabled', false)
+    }
+  }
+
   $('.btnFlashCardEdit').on('click', function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
@@ -158,21 +206,30 @@ $(function(){
       // Save the current notes
 
       // Populate our current flash card array
-      var currentSelectedNodeFlashArray = notebookMngr.DB_Get_Note_Flash_Cards(currentSelectedNodeID)
-
-      //set the cards to display the first in the array
-      if (currentSelectedNodeFlashArray.length > 0) {
-        $('.flashQuestion')[0].textContent = currentSelectedNodeFlashArray[0].lineContent;
-
-        for (var i = 0; i < currentSelectedNodeFlashArray[0].answers.length; i++) {
-          $('.flashAnswer')[0].textContent = currentSelectedNodeFlashArray[0].answers[i];
-        }
-      }
+      currentNodeFlashArray = notebookMngr.DB_Get_Note_Flash_Cards(currentSelectedNodeID)
+console.log(currentNodeFlashArray);
+      Navigate_Flash_Cards('first');
 
     } else {
       $('.flashCardEditPanel').addClass('collapse')
     }
   })
+
+  $('button[name=btnFlashCardPrevious]').on('click', function() {
+    Navigate_Flash_Cards('previous');
+  })
+
+  $('button[name=btnFlashCardForward]').on('click', function() {
+    Navigate_Flash_Cards('next');
+  })
+
+  /*
+  Flash card edit previous button
+  */
+
+  /*
+  Flash card edit forward button
+  */
 
   // $('.btnSaveNotes').on('dblclick', function() {
   //   Unhighlight_All_Notes();
@@ -240,7 +297,8 @@ $(function(){
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
   var currentSelectedNodeID = "";
-  var currentSelectedNodeFlashArray = [];
+  var currentNodeFlashArray = [];
+  var currentNodeFlashIndex = 0;
 
   /*
   Insert some test data if they have an empty local storage
