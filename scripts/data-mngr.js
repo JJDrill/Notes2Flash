@@ -21,10 +21,6 @@ var Notebook_Mngr = function() {
     var flashCards = [];
   }
 
-  this.DB_Get_Notebook = function() {
-
-  }
-
   this.DB_Get_Full_List = function() {
     var return_array = []
     for (var i = 0; i < localStorage.length; i++) {
@@ -85,6 +81,8 @@ var Notebook_Mngr = function() {
       return false;
     }
 
+    this.Generate_Flash_Cards(note_to_save)
+
     var string_to_save = JSON.stringify(note_to_save)
     localStorage.setItem(note_to_save.noteId, string_to_save)
   };
@@ -100,6 +98,90 @@ var Notebook_Mngr = function() {
 
     var myKey = pGenerateNoteKey(note_to_delete)
     localStorage.removeItem(myKey)
+  }
+
+  /*
+  Generates the flash card objects for a note
+  */
+  this.Generate_Flash_Cards = function(note) {
+    var contentArray = note.notes.split('\n')
+    var flashArray = [];
+    var tabIndex = 0;
+
+    /*
+    loop through each line in the Content and add it to our
+    flashArray with each line object
+    */
+    for (var i = 0; i < contentArray.length; i++) {
+
+      if ('<ul>' === contentArray[i]) {
+        tabIndex += 1;
+      } else if ('</ul>' === contentArray[i]) {
+        tabIndex -= 1;
+      }
+
+      var newAnswerObj = {
+        "lineNumber": i + 1,
+        "tabIndex": tabIndex,
+        "lineContent": contentArray[i],
+        "answers": []
+      }
+
+      flashArray.push(newAnswerObj);
+
+      if ( pIsIgnoredForFlash( newAnswerObj.lineContent ) ) {
+      // if (newAnswerObj.lineContent === "<ul>"  ||
+      //     newAnswerObj.lineContent === "</ul>"  ||
+      //     newAnswerObj.lineContent === "<p>&nbsp;</p>") {
+        continue;
+      }
+
+      /*
+      Now loop through the flash array in reverse
+      looking for parents which have a n-1 tab index
+      */
+      for (var flashIndex = flashArray.length - 1; flashIndex >=0; flashIndex--) {
+        // check if the line is something we need to ignore
+        if ( pIsIgnoredForFlash( flashArray[flashIndex].lineContent ) ) {
+          continue;
+
+        } else {
+          console.log(flashArray[flashIndex].lineContent);
+          //debugger;
+          if (flashArray[flashIndex].tabIndex === newAnswerObj.tabIndex - 1) {
+            flashArray[flashIndex].answers.push(newAnswerObj.lineContent)
+            break;
+          }
+        }
+      }
+    }
+
+    console.log(flashArray);
+
+    //now go through and clean up the fragmented array
+    var fullLength = flashArray.length;
+    for (var i = fullLength-1; i >= 0; i--) {
+      if (flashArray[i].answers.length === 0) {
+        flashArray.splice(i,1);
+      }
+    }
+
+    console.log(flashArray);
+  }
+
+  /*
+  Private
+  Used to check if a string is an ignored sting while we're parsing flash cards
+  */
+  var pIsIgnoredForFlash = function(line) {
+    if (line === "<ul>"  ||
+        line === "</ul>"  ||
+        line === "<p>&nbsp;</p>") {
+      return true;
+
+    } else {
+      return false;
+    }
   }
 
   /*
