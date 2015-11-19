@@ -62,7 +62,7 @@ var Notebook_Mngr = function() {
   */
   this.DB_Get_Note = function(note_key) {
     var dataToCopy = JSON.parse( localStorage.getItem(note_key) )
-console.log(dataToCopy);
+
     var returnItem = new this.objNote();
     returnItem.noteId = dataToCopy.noteId;
     returnItem.refNotebookId = dataToCopy.refNotebookId;

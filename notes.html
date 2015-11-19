@@ -62,7 +62,7 @@
           <div class="panel panel-default notes-flash-panel">
             <div class="panel-body notesBody">
                <form>
-                 <textarea class="notesTextArea" name="notesText" style="width:100%; height:200px">
+                 <textarea class="notesTextArea" name="notesText">
                  </textarea>
                </form>
 
@@ -72,6 +72,13 @@
                    <div class="row panel-body collapse flashCardEditPanel">
 
                      <div class="row">
+                       <div class="col-sm-12">
+                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardPrevious">&lt;</button>
+                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardForward">&gt;</button>
+                       </div>
+                     </div>
+
+                     <div class="row">
                        <div class="col-sm-5 col-sm-offset-1">
                          <!-- Question Panel -->
                          <div class="flashCard flashQuestion">Question</div>
@@ -79,13 +86,6 @@
                        <div class="col-sm-5">
                          <!-- Answer Panel -->
                          <div class="flashCard flashAnswer">Answer</div>
-                       </div>
-                     </div>
-
-                     <div class="row">
-                       <div class="col-sm-12">
-                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardPrevious">&lt;</button>
-                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardForward">&gt;</button>
                        </div>
                      </div>
 

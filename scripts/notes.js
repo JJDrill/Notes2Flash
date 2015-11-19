@@ -157,8 +157,6 @@ $(function(){
       console.log('ERROR: Invalid flash card direction.');
     }
 
-console.log(noteBeingEdited.flashCards);
-
     // set the cards to display the current question/answers
     // also highlight the needed lines in the note
 
@@ -191,10 +189,13 @@ console.log(noteBeingEdited.flashCards);
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
+      console.log($('.notesTextArea'));
+      $('#notesText_ifr').css('height', '40vh')
 
     } else {
       $('.flashCardEditPanel').addClass('collapse')
       Unhighlight_All_Notes()
+      $('#notesText_ifr').css('height', '63vh')
     }
   }
   // Flash card edit pannel button

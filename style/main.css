@@ -9,12 +9,13 @@
 
 .flashCardWindow {
   border-style: hidden;
-  padding-top: 10px;
+  padding-top: 0;
   margin-bottom: 0;
 }
 
 .notes-flash-panel {
   margin-bottom: 0;
+  height: 80vh;
 }
 
 .flashCard {
@@ -23,13 +24,19 @@
 
 .flashEditButtons {
   width: 75px;
-  margin-top: 1%;
+  margin-top: 0;
+  margin-bottom: 1%;
 }
 
-.notesBody {
+.notesTextArea {
   padding: 0;
+  height: 63vh;
 }
 
-/*#mceu_28 {
-  display: none;
-}*/
+.flashQuestion {
+  height: 100px;
+}
+
+.flashAnswer {
+  height: 100px;
+}
