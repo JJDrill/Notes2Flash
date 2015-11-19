@@ -1,8 +1,8 @@
 $(function(){
   var NEW_NOTEBOOK_ID = "NEW_NOTEBOOK";
-  var NEW_NOTEBOOK_TEXT = "* Add New Notebook *";
+  var NEW_NOTEBOOK_TEXT = "New Notebook";
   var NEW_NOTE_ID = "NEW_NOTE_";
-  var NEW_NOTE_TEXT = "* Add New Note *";
+  var NEW_NOTE_TEXT = "New Note";
 
   /*
   Get all the content from the note text area
@@ -86,7 +86,8 @@ $(function(){
     var defaultNewNotebook = {
       "id" : NEW_NOTEBOOK_ID,
       "parent" : "#",
-      "text" : NEW_NOTEBOOK_TEXT
+      "text" : NEW_NOTEBOOK_TEXT,
+      "icon" : "glyphicon glyphicon-option-horizontal"
     }
     dataArray.push(defaultNewNotebook)
 
@@ -98,7 +99,8 @@ $(function(){
         var defaultNewNote = {
           "id" : NEW_NOTE_ID + listData[i].notebook_id,
           "parent" : listData[i].notebook_id,
-          "text" : NEW_NOTE_TEXT
+          "text" : NEW_NOTE_TEXT,
+          "icon" : "glyphicon glyphicon-option-horizontal"
         }
         dataArray.push(defaultNewNote)
 
@@ -106,7 +108,8 @@ $(function(){
         var newItem = {
           "id" : listData[i].notebook_id,
           "parent" : "#",
-          "text" : listData[i].notebook_name
+          "text" : listData[i].notebook_name,
+          "icon" : "glyphicon glyphicon-folder-open"
         }
         dataArray.push(newItem)
 
@@ -115,7 +118,8 @@ $(function(){
         var newItem = {
           "id" : listData[i].noteId,
           "parent" : listData[i].refNotebookId,
-          "text" : listData[i].noteName
+          "text" : listData[i].noteName,
+          "icon" : "glyphicon glyphicon-file"
         }
         dataArray.push(newItem)
       }
@@ -183,8 +187,7 @@ console.log(noteBeingEdited.flashCards);
     }
   }
 
-  // Flash card edit pannel button
-  $('.btnFlashCardEdit').on('click', function() {
+  ShowHide_Flash_Card_Edit = function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
@@ -193,7 +196,11 @@ console.log(noteBeingEdited.flashCards);
       $('.flashCardEditPanel').addClass('collapse')
       Unhighlight_All_Notes()
     }
-  })
+  }
+  // Flash card edit pannel button
+  // $('.btnFlashCardEdit').on('click', function() {
+  //
+  // })
 
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
@@ -255,8 +262,7 @@ console.log(noteBeingEdited.flashCards);
     }
   });
 
-  // Button click for the dictionary lookup
-  $('.btnDefinition').on('click', function() {
+  Get_Word_Definition = function() {
     // set a bookmark first
     var bm = tinymce.activeEditor.selection.getBookmark();
 
@@ -271,9 +277,29 @@ console.log(noteBeingEdited.flashCards);
     });
 
     //go back to the line we were on using our bookmark
-    tinyMCE.activeEditor.selection.moveToBookmark(bm);
-  });
+    tinymce.activeEditor.selection.moveToBookmark(bm);
+  }
 
+  tinymce.PluginManager.add('wordDefinition', function(editor, url) {
+      // Add our word definition button
+      editor.addButton('wordDefinition', {
+          text: 'Get Definition',
+          icon: false,
+          onclick: function() {
+            console.log('test!!!');
+            Get_Word_Definition();
+          }
+      });
+
+      // Add our flash card edit
+      editor.addButton('flashEdit', {
+          text: 'Flash Card Edit',
+          icon: false,
+          onclick: function() {
+            ShowHide_Flash_Card_Edit();
+          }
+      });
+  });
 
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();

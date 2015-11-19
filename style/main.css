@@ -1,7 +1,21 @@
-/*.flashCardPanel {
-  display: flex;
-  justify-content: flex-end;
-}*/
+.page-header {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tagLine {
+  font-size: 40%;
+}
+
+.flashCardWindow {
+  border-style: hidden;
+  padding-top: 10px;
+  margin-bottom: 0;
+}
+
+.notes-flash-panel {
+  margin-bottom: 0;
+}
 
 .flashCard {
   border: 1px solid;
@@ -11,3 +25,11 @@
   width: 75px;
   margin-top: 1%;
 }
+
+.notesBody {
+  padding: 0;
+}
+
+/*#mceu_28 {
+  display: none;
+}*/
