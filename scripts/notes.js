@@ -39,7 +39,8 @@ $(function(){
   */
   Highlight_Notes = function(lineNumber, item) {
     var notesArray = Get_Notes('array')
-    var lineElements = $(notesArray[lineNumber])
+    var lineNumberInArray = lineNumber-1
+    var lineElements = $(notesArray[lineNumberInArray])
 
     if ('question' === item.toLowerCase()) {
       $(lineElements[0]).addClass('highlightQuestion')
@@ -47,7 +48,7 @@ $(function(){
       $(lineElements[0]).addClass('highlightAnswer')
     }
 
-    notesArray[lineNumber] = lineElements[0].outerHTML
+    notesArray[lineNumberInArray] = lineElements[0].outerHTML
     Put_Notes(notesArray)
   }
 
@@ -64,11 +65,11 @@ $(function(){
 
         if ($(lineElements[0]).hasClass('highlightQuestion')) {
           $(lineElements[0]).removeClass('highlightQuestion')
+          notesArray[i] = lineElements[0].outerHTML
         } else if ($(lineElements[0]).hasClass('highlightAnswer')) {
           $(lineElements[0]).removeClass('highlightAnswer')
+          notesArray[i] = lineElements[0].outerHTML
         }
-
-        notesArray[i] = lineElements[0].outerHTML
       }
     }
     Put_Notes(notesArray)
@@ -109,7 +110,6 @@ $(function(){
         }
         dataArray.push(newItem)
 
-
       // for note objects
       } else if (listData[i] instanceof notebookMngr.objNote) {
         var newItem = {
@@ -127,70 +127,54 @@ $(function(){
     } });
     $('#jstree_demo_div').jstree(true).redraw(true);
     //$('#jstree_demo_div').jstree(true).refresh();
-
-    //$('#jstree_demo_div').jstree('refresh');
-    // $('#jstree_demo_div').jstree({ 'core' : {
-    //     'data' : [
-    //        {  "id" : "ajson1", "parent" : "#", "text" : "History" },
-    //        {  "id" : "ajson2", "parent" : "#", "text" : "Science" },
-    //        {  "id" : "ajson3", "parent" : "ajson2", "text" : "11/16" },
-    //        {  "id" : "ajson4", "parent" : "ajson2", "text" : "11/17"},
-    //     ]
-    // } });
   }
-
-  /*
-  Save the notes when the user clicks the save button
-  */
-  // $('.btnSaveNotes').on('click', function() {
-  //   var myNotes = Get_Notes('string')
-  //   Highlight_Notes(0, 'question')
-  //   Highlight_Notes(2, 'answer')
-  //   Highlight_Notes(4, 'answer')
-  //
-  //   notebookMngr.DB_Save_Note(myNote)
-  // })
 
   Navigate_Flash_Cards = function(direction) {
     // do nothing if the flash card array isn't populated
     //debugger;
-    if (currentNodeFlashArray.length === 0) {
+    if (noteBeingEdited.flashCards.length === 0) {
       return;
     }
 
     // handle the index modification first
     if ('first' === direction) {
       currentNodeFlashIndex = 0;
-
     } else if ('next' === direction) {
-      if (currentNodeFlashIndex < currentNodeFlashArray.length-1) {
+      if (currentNodeFlashIndex < noteBeingEdited.flashCards.length-1) {
         currentNodeFlashIndex += 1;
       }
-
     } else if ('previous' === direction) {
       if (currentNodeFlashIndex > 0) {
         currentNodeFlashIndex -= 1;
       }
-
     } else if ('last' === direction) {
-      currentNodeFlashIndex = currentNodeFlashArray.length;
-
+      currentNodeFlashIndex = noteBeingEdited.flashCards.length;
     } else {
       console.log('ERROR: Invalid flash card direction.');
     }
 
-    // set the cards to display the index
-    $('.flashQuestion')[0].textContent = currentNodeFlashArray[currentNodeFlashIndex].lineContent;
+console.log(noteBeingEdited.flashCards);
 
-    for (var i = 0; i < currentNodeFlashArray[0].answers.length; i++) {
-      $('.flashAnswer')[0].textContent = currentNodeFlashArray[currentNodeFlashIndex].answers[i];
+    // set the cards to display the current question/answers
+    // also highlight the needed lines in the note
+
+    Unhighlight_All_Notes();
+    var flashCardArray = noteBeingEdited.flashCards[currentNodeFlashIndex];
+
+    $('.flashQuestion')[0].textContent = flashCardArray.lineContent;
+    Highlight_Notes(flashCardArray.lineNumber, 'question')
+    $('.flashAnswer')[0].textContent = ""
+
+    for (var i = 0; i < flashCardArray.answers.length; i++) {
+      $('.flashAnswer')[0].textContent += "\r" + flashCardArray.answers[i].lineContent;
+      Highlight_Notes(flashCardArray.answers[i].lineNumber, 'answer')
     }
 
     // enable/disable the forward and back buttons accordingly
     if (currentNodeFlashIndex === 0) {
       $('button[name=btnFlashCardPrevious]').prop('disabled', true)
       $('button[name=btnFlashCardForward]').prop('disabled', false)
-    } else if (currentNodeFlashIndex >= currentNodeFlashArray.length-1) {
+    } else if (currentNodeFlashIndex >= noteBeingEdited.flashCards.length-1) {
       $('button[name=btnFlashCardPrevious]').prop('disabled', false)
       $('button[name=btnFlashCardForward]').prop('disabled', true)
     } else {
@@ -199,51 +183,29 @@ $(function(){
     }
   }
 
+  // Flash card edit pannel button
   $('.btnFlashCardEdit').on('click', function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
-
-      // Save the current notes
-
-      // Populate our current flash card array
-      currentNodeFlashArray = notebookMngr.DB_Get_Note_Flash_Cards(currentSelectedNodeID)
-console.log(currentNodeFlashArray);
       Navigate_Flash_Cards('first');
 
     } else {
       $('.flashCardEditPanel').addClass('collapse')
+      Unhighlight_All_Notes()
     }
   })
 
+  // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
     Navigate_Flash_Cards('previous');
   })
 
+  // Flash card forward button
   $('button[name=btnFlashCardForward]').on('click', function() {
     Navigate_Flash_Cards('next');
   })
 
-  /*
-  Flash card edit previous button
-  */
-
-  /*
-  Flash card edit forward button
-  */
-
-  // $('.btnSaveNotes').on('dblclick', function() {
-  //   Unhighlight_All_Notes();
-  //
-  //   notebookMngr.DB_Delete_Note(myNote)
-  // })
-  //
-  // $('.btnSaveNotesAs').on('click', function() {
-  //   // get the currently selected notebook in the tree
-  //   var selected = $('#jstree_demo_div').jstree('get_selected')
-  // })
-
   $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-
     if (data.action === 'select_node') {
 
       //check if it's a note, if it is open it!
@@ -255,9 +217,9 @@ console.log(currentNodeFlashArray);
           noteToUpdate.notes = Get_Notes('string');
           notebookMngr.DB_Save_Note(noteToUpdate)
         }
-
-        var noteToOpen = notebookMngr.DB_Get_Note(data.selected[0])
-        Put_Notes(noteToOpen.notes)
+        //now open the new note
+        noteBeingEdited = notebookMngr.DB_Get_Note(data.selected[0])
+        Put_Notes(noteBeingEdited.notes)
         currentSelectedNodeID = data.selected[0];
 
       // check if the user clicked on the new notebook node
@@ -293,7 +255,11 @@ console.log(currentNodeFlashArray);
     }
   });
 
+  // Button click for the dictionary lookup
   $('.btnDefinition').on('click', function() {
+    // set a bookmark first
+    var bm = tinymce.activeEditor.selection.getBookmark();
+
     var wordToLookup = tinymce.activeEditor.selection.getContent();
     mngrDictionary.Get_Definition(wordToLookup, function(data){
       var fullDefinitionResponse = wordToLookup + " : "
@@ -304,6 +270,8 @@ console.log(currentNodeFlashArray);
       tinymce.activeEditor.selection.setContent(fullDefinitionResponse);
     });
 
+    //go back to the line we were on using our bookmark
+    tinyMCE.activeEditor.selection.moveToBookmark(bm);
   });
 
 
@@ -311,7 +279,7 @@ console.log(currentNodeFlashArray);
   var notebookMngr = new Notebook_Mngr();
   var mngrDictionary = new Dictionary_Mngr();
   var currentSelectedNodeID = "";
-  var currentNodeFlashArray = [];
+  var noteBeingEdited = new notebookMngr.objNote();
   var currentNodeFlashIndex = 0;
 
   /*

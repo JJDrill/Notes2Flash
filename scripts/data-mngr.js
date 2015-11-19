@@ -62,7 +62,7 @@ var Notebook_Mngr = function() {
   */
   this.DB_Get_Note = function(note_key) {
     var dataToCopy = JSON.parse( localStorage.getItem(note_key) )
-
+console.log(dataToCopy);
     var returnItem = new this.objNote();
     returnItem.noteId = dataToCopy.noteId;
     returnItem.refNotebookId = dataToCopy.refNotebookId;
@@ -144,6 +144,7 @@ var Notebook_Mngr = function() {
       /*
       Now loop through the flash array in reverse
       looking for parents which have a n-1 tab index
+      which will be an answer
       */
       for (var flashIndex = flashArray.length - 1; flashIndex >=0; flashIndex--) {
         // check if the line is something we need to ignore
@@ -151,7 +152,7 @@ var Notebook_Mngr = function() {
           continue;
         } else {
           if (flashArray[flashIndex].tabIndex === newAnswerObj.tabIndex - 1) {
-            flashArray[flashIndex].answers.push(newAnswerObj.lineContent)
+            flashArray[flashIndex].answers.push(newAnswerObj)
             break;
           }
         }
