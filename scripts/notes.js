@@ -199,7 +199,7 @@ $(function(){
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
-      console.log($('.notesTextArea'));
+      //console.log($('.notesTextArea'));
       $('#notesText_ifr').css('height', '40vh')
 
     } else {
@@ -298,7 +298,7 @@ $(function(){
           text: 'Get Definition',
           icon: false,
           onclick: function() {
-            console.log('test!!!');
+            //console.log('test!!!');
             Get_Word_Definition();
           }
       });
