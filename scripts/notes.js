@@ -75,71 +75,67 @@ $(function(){
     Put_Notes(notesArray)
   }
 
-  /*
-  Update tree with new info
-  */
-  Update_Tree = function(listData) {
-    // build the data array
-    var dataArray = []
-
-    // add the default "add new note" node for each notebook at the start
-    var defaultNewNotebook = {
-      "id" : NEW_NOTEBOOK_ID,
-      "parent" : "#",
-      "text" : NEW_NOTEBOOK_TEXT,
-      "icon" : "glyphicon glyphicon-option-horizontal"
-    }
-    dataArray.push(defaultNewNotebook)
-
-    for (var i = 0; i < listData.length; i++) {
-      // for notebook objects
-      if (listData[i] instanceof notebookMngr.objNotebook) {
-
-        // add the default "add new note" node for each notebook at the start
-        var defaultNewNote = {
-          "id" : NEW_NOTE_ID + listData[i].notebook_id,
-          "parent" : listData[i].notebook_id,
-          "text" : NEW_NOTE_TEXT,
-          "icon" : "glyphicon glyphicon-option-horizontal"
-        }
-        dataArray.push(defaultNewNote)
-
-        //now add the notebook node
-        var newItem = {
-          "id" : listData[i].notebook_id,
-          "parent" : "#",
-          "text" : listData[i].notebook_name,
-          "icon" : "glyphicon glyphicon-folder-open"
-        }
-        dataArray.push(newItem)
-
-      // for note objects
-      } else if (listData[i] instanceof notebookMngr.objNote) {
-        var newItem = {
-          "id" : listData[i].noteId,
-          "parent" : listData[i].refNotebookId,
-          "text" : listData[i].noteName,
-          "icon" : "glyphicon glyphicon-file"
-        }
-        dataArray.push(newItem)
-      }
-    }
-
-    $('#jstree_demo_div').jstree('deselect_all');
-    $('#jstree_demo_div').jstree(
-      { 'core' : {
-        'check_callback': true,
-        'cache' : false,
-        'data' : dataArray
-    } });
-    //$('#jstree_demo_div').jstree(true).redraw(true);
-    //$('#jstree_demo_div').jstree(true).refresh();
-    $("#jstree_demo_div").jstree('refresh');
-  }
-
-  Add_Notebook = function() {
-    $.tree_reference('#jstree_demo_div').create({ data: 'Created node' },$('#pjson0_3'));
-  }
+  // /*
+  // Update tree with new info
+  // */
+  // Update_Tree = function(listData) {
+  //   // build the data array
+  //   var dataArray = []
+  //
+  //   // add the default "add new note" node for each notebook at the start
+  //   var defaultNewNotebook = {
+  //     "id" : NEW_NOTEBOOK_ID,
+  //     "parent" : "#",
+  //     "text" : NEW_NOTEBOOK_TEXT,
+  //     "icon" : "glyphicon glyphicon-option-horizontal"
+  //   }
+  //   dataArray.push(defaultNewNotebook)
+  //
+  //   for (var i = 0; i < listData.length; i++) {
+  //     // for notebook objects
+  //     if (listData[i] instanceof notebookMngr.objNotebook) {
+  //
+  //       // add the default "add new note" node for each notebook at the start
+  //       var defaultNewNote = {
+  //         "id" : NEW_NOTE_ID + listData[i].notebook_id,
+  //         "parent" : listData[i].notebook_id,
+  //         "text" : NEW_NOTE_TEXT,
+  //         "icon" : "glyphicon glyphicon-option-horizontal"
+  //       }
+  //       dataArray.push(defaultNewNote)
+  //
+  //       //now add the notebook node
+  //       var newItem = {
+  //         "id" : listData[i].notebook_id,
+  //         "parent" : "#",
+  //         "text" : listData[i].notebook_name,
+  //         "icon" : "glyphicon glyphicon-folder-open"
+  //       }
+  //       dataArray.push(newItem)
+  //
+  //     // for note objects
+  //     } else if (listData[i] instanceof notebookMngr.objNote) {
+  //       var newItem = {
+  //         "id" : listData[i].noteId,
+  //         "parent" : listData[i].refNotebookId,
+  //         "text" : listData[i].noteName,
+  //         "icon" : "glyphicon glyphicon-file"
+  //       }
+  //       dataArray.push(newItem)
+  //     }
+  //   }
+  //
+  //   $('#jstree_demo_div').jstree('deselect_all');
+  //   $('#jstree_demo_div').jstree(
+  //     { 'core' : {
+  //       'check_callback': true,
+  //       'cache' : false,
+  //       'data' : dataArray
+  //   } });
+  //   //$('#jstree_demo_div').jstree(true).redraw(true);
+  //   //$('#jstree_demo_div').jstree(true).refresh();
+  //   $("#jstree_demo_div").jstree('refresh');
+  // }
 
   Navigate_Flash_Cards = function(direction) {
     // do nothing if the flash card array isn't populated
@@ -208,10 +204,6 @@ $(function(){
       $('#notesText_ifr').css('height', '63vh')
     }
   }
-  // Flash card edit pannel button
-  // $('.btnFlashCardEdit').on('click', function() {
-  //
-  // })
 
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
@@ -223,56 +215,71 @@ $(function(){
     Navigate_Flash_Cards('next');
   })
 
-  $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-    if (data.action === 'select_node') {
-
-      //check if it's a note, if it is open it!
-      if (data.selected[0].substring(0,2) === "NT") {
-        //save the content first if the node changed
-        if (currentSelectedNodeID !== data.selected[0] &&
-            currentSelectedNodeID !== "") {
-          var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
-          noteToUpdate.notes = Get_Notes('string');
-          notebookMngr.DB_Save_Note(noteToUpdate)
-        }
-        //now open the new note
-        noteBeingEdited = notebookMngr.DB_Get_Note(data.selected[0])
-        Put_Notes(noteBeingEdited.notes)
-        currentSelectedNodeID = data.selected[0];
-
-      // check if the user clicked on the new notebook node
-      } else if (data.selected[0].substring(0,NEW_NOTEBOOK_ID.length) === NEW_NOTEBOOK_ID) {
-        var newNotebookName = prompt("Please enter the new notebook name", "New Notebook");
-
-        if (newNotebookName != null) {
-          var newBook = new notebookMngr.objNotebook();
-          newBook.notebook_id = indexMngr.Get_New_Notebook_ID();;
-          newBook.notebook_name = newNotebookName;
-          notebookMngr.DB_Save_Notebook(newBook)
-
-          //refresh the tree
-          var fullList = notebookMngr.DB_Get_Full_List();
-          Update_Tree(fullList)
-        }
-
-      // check if the user clicked on the new note node
-      } else if (data.selected[0].substring(0,NEW_NOTE_ID.length) === NEW_NOTE_ID) {
-        var newNotebookName = prompt("Please enter the new note name", "New Note");
-        if (newNotebookName != null) {
-          var newNote = new notebookMngr.objNote();
-          newNote.noteId = indexMngr.Get_New_Note_ID();
-          newNote.refNotebookId = data.node.parents[0];
-          newNote.noteName = newNotebookName;
-          newNote.notes = "";
-          notebookMngr.DB_Save_Note(newNote)
-
-          //refresh the tree
-          var fullList = notebookMngr.DB_Get_Full_List();
-          Update_Tree(fullList)
-        }
-      }
+  // Handle user clicking on a Note
+  $(document).on('click', '.note', function(e){
+    //save the content first if the node changed
+    if (currentSelectedNodeID !== e.currentTarget.id &&
+        currentSelectedNodeID !== "") {
+      var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
+      noteToUpdate.notes = Get_Notes('string');
+      notebookMngr.DB_Save_Note(noteToUpdate)
     }
+    //now open the new note
+    noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
+    Put_Notes(noteBeingEdited.notes)
+    currentSelectedNodeID = e.currentTarget.id;
   });
+
+  // $('#jstree_demo_div').on("changed.jstree", function (e, data) {
+  //   if (data.action === 'select_node') {
+  //
+  //     //check if it's a note, if it is open it!
+  //     if (data.selected[0].substring(0,2) === "NT") {
+  //       //save the content first if the node changed
+  //       if (currentSelectedNodeID !== data.selected[0] &&
+  //           currentSelectedNodeID !== "") {
+  //         var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
+  //         noteToUpdate.notes = Get_Notes('string');
+  //         notebookMngr.DB_Save_Note(noteToUpdate)
+  //       }
+  //       //now open the new note
+  //       noteBeingEdited = notebookMngr.DB_Get_Note(data.selected[0])
+  //       Put_Notes(noteBeingEdited.notes)
+  //       currentSelectedNodeID = data.selected[0];
+  //
+  //     // check if the user clicked on the new notebook node
+  //     } else if (data.selected[0].substring(0,NEW_NOTEBOOK_ID.length) === NEW_NOTEBOOK_ID) {
+  //       var newNotebookName = prompt("Please enter the new notebook name", "New Notebook");
+  //
+  //       if (newNotebookName != null) {
+  //         var newBook = new notebookMngr.objNotebook();
+  //         newBook.notebook_id = indexMngr.Get_New_Notebook_ID();;
+  //         newBook.notebook_name = newNotebookName;
+  //         notebookMngr.DB_Save_Notebook(newBook)
+  //
+  //         //refresh the tree
+  //         var fullList = notebookMngr.DB_Get_Full_List();
+  //         Update_Tree(fullList)
+  //       }
+  //
+  //     // check if the user clicked on the new note node
+  //     } else if (data.selected[0].substring(0,NEW_NOTE_ID.length) === NEW_NOTE_ID) {
+  //       var newNotebookName = prompt("Please enter the new note name", "New Note");
+  //       if (newNotebookName != null) {
+  //         var newNote = new notebookMngr.objNote();
+  //         newNote.noteId = indexMngr.Get_New_Note_ID();
+  //         newNote.refNotebookId = data.node.parents[0];
+  //         newNote.noteName = newNotebookName;
+  //         newNote.notes = "";
+  //         notebookMngr.DB_Save_Note(newNote)
+  //
+  //         //refresh the tree
+  //         var fullList = notebookMngr.DB_Get_Full_List();
+  //         Update_Tree(fullList)
+  //       }
+  //     }
+  //   }
+  // });
 
   Get_Word_Definition = function() {
     // set a bookmark first
@@ -316,6 +323,7 @@ $(function(){
   var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
   var mngrDictionary = new Dictionary_Mngr();
+  var mngrFolder = new File_Manager();
   var currentSelectedNodeID = "";
   var noteBeingEdited = new notebookMngr.objNote();
   var currentNodeFlashIndex = 0;
@@ -351,6 +359,10 @@ $(function(){
     notebookMngr.DB_Save_Notebook(myBook2)
   }
 
-  var fullList = notebookMngr.DB_Get_Full_List();
-  Update_Tree(fullList)
+  var noteBookList = notebookMngr.DB_Get_Notebook_List();
+  var noteList = notebookMngr.DB_Note_List();
+  var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
+  //console.log(navToBuild);
+  $('#accordion').append(navToBuild);
+  //Update_Tree(fullList)
 });
