@@ -362,7 +362,5 @@ $(function(){
   var noteBookList = notebookMngr.DB_Get_Notebook_List();
   var noteList = notebookMngr.DB_Note_List();
   var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
-  //console.log(navToBuild);
   $('#accordion').append(navToBuild);
-  //Update_Tree(fullList)
 });

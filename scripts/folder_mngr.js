@@ -10,7 +10,7 @@ var File_Manager = function() {
       var notebookStartString = pGet_Notebook(
         noteBookList[noteBookListIndex].notebook_id,
         noteBookList[noteBookListIndex].notebook_name,
-      noteBookListIndex)
+        noteBookListIndex)
 
       var noteString = ""
 
@@ -38,12 +38,13 @@ var File_Manager = function() {
     '<div class="panel panel-default">' +
       '<div class="panel-heading" role="tab" id="' + notebookId + '">' +
         '<h4 class="panel-title">' +
-          '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' + notebookIndex + '" aria-expanded="true" aria-controls="collapse' + notebookIndex + '">' +
+          '<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' + notebookIndex + '" aria-expanded="false" aria-controls="collapse' + notebookIndex + '">' +
             notebookName +
           '</a>' +
         '</h4>' +
       '</div>' +
-      '<div id="collapse' + notebookIndex + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading' + notebookIndex + '">' +
+      //'<div id="collapse' + notebookIndex + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading' + notebookIndex + '">' +
+      '<div id="collapse' + notebookIndex + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + notebookIndex + '">' +
         '<div class="list-group noteList">'
 
     return response;
