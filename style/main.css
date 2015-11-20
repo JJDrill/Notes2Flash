@@ -35,8 +35,14 @@
 
 .flashQuestion {
   height: 100px;
+  color: #ff6600;
+  text-align: left;
+  padding: 3px;
 }
 
 .flashAnswer {
   height: 100px;
+  color: #0099ff;
+  text-align: left;
+  padding: 3px;
 }

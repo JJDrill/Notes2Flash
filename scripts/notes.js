@@ -126,11 +126,19 @@ $(function(){
     }
 
     $('#jstree_demo_div').jstree('deselect_all');
-    $('#jstree_demo_div').jstree({ 'core' : {
+    $('#jstree_demo_div').jstree(
+      { 'core' : {
+        'check_callback': true,
+        'cache' : false,
         'data' : dataArray
     } });
-    $('#jstree_demo_div').jstree(true).redraw(true);
+    //$('#jstree_demo_div').jstree(true).redraw(true);
     //$('#jstree_demo_div').jstree(true).refresh();
+    $("#jstree_demo_div").jstree('refresh');
+  }
+
+  Add_Notebook = function() {
+    $.tree_reference('#jstree_demo_div').create({ data: 'Created node' },$('#pjson0_3'));
   }
 
   Navigate_Flash_Cards = function(direction) {
@@ -159,18 +167,20 @@ $(function(){
 
     // set the cards to display the current question/answers
     // also highlight the needed lines in the note
-
     Unhighlight_All_Notes();
     var flashCardArray = noteBeingEdited.flashCards[currentNodeFlashIndex];
 
-    $('.flashQuestion')[0].textContent = flashCardArray.lineContent;
+    $('.flashQuestion')[0].textContent = $(flashCardArray.lineContent).text();
     Highlight_Notes(flashCardArray.lineNumber, 'question')
     $('.flashAnswer')[0].textContent = ""
 
+    var fullAnswerText = "";
     for (var i = 0; i < flashCardArray.answers.length; i++) {
-      $('.flashAnswer')[0].textContent += "\r" + flashCardArray.answers[i].lineContent;
+      answerText = $(flashCardArray.answers[i].lineContent).text();
+      fullAnswerText += answerText + '\r\n';
       Highlight_Notes(flashCardArray.answers[i].lineNumber, 'answer')
     }
+    $('.flashAnswer')[0].innerText = fullAnswerText;
 
     // enable/disable the forward and back buttons accordingly
     if (currentNodeFlashIndex === 0) {
@@ -233,6 +243,7 @@ $(function(){
       // check if the user clicked on the new notebook node
       } else if (data.selected[0].substring(0,NEW_NOTEBOOK_ID.length) === NEW_NOTEBOOK_ID) {
         var newNotebookName = prompt("Please enter the new notebook name", "New Notebook");
+
         if (newNotebookName != null) {
           var newBook = new notebookMngr.objNotebook();
           newBook.notebook_id = indexMngr.Get_New_Notebook_ID();;
