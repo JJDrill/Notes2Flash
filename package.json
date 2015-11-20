@@ -1,0 +1,24 @@
+{
+  "name": "notes2flash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JJDrill/Notes2Flash.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JJDrill/Notes2Flash/issues"
+  },
+  "homepage": "https://github.com/JJDrill/Notes2Flash#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.0",
+    "gulp-uglify": "^1.5.1"
+  }
+}
