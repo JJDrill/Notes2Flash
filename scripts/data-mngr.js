@@ -2,6 +2,15 @@ var Notebook_Mngr = function() {
   var dbCode_Notebooks = 'NB';
   var dbCode_Notes = 'NT';
 
+  var KEY_NOTEBOOK_INDEX = "Index_Notebook"
+  var KEY_NOTE_INDEX = "Index_Note"
+
+  var currentNotebookIndex = localStorage.getItem(KEY_NOTEBOOK_INDEX)
+  currentNotebookIndex = parseInt(currentNotebookIndex, 10) || 0
+
+  var currentNoteIndex = localStorage.getItem(KEY_NOTE_INDEX)
+  currentNoteIndex = parseInt(currentNoteIndex, 10) || 0
+
   /*
   Defines the notebook object
   */
@@ -86,6 +95,14 @@ var Notebook_Mngr = function() {
     return return_array
   }
 
+  this.DB_Create_New_Notebook = function(newNotebookName) {
+    var newBook = new this.objNotebook();
+    newBook.notebook_id = Get_New_Notebook_ID();
+    newBook.notebook_name = newNotebookName;
+    this.DB_Save_Notebook(newBook)
+    return newBook;
+  }
+
   this.DB_Save_Notebook = function(notebook) {
     if (!(notebook instanceof this.objNotebook)) {
       console.log("Object passed in is not of type objNotebook.");
@@ -94,6 +111,29 @@ var Notebook_Mngr = function() {
 
     var string_to_save = JSON.stringify(notebook)
     localStorage.setItem(notebook.notebook_id, string_to_save)
+  }
+
+  this.DB_Delete_Notebook = function(notebookId) {
+    // First delete all associated notes, then the notebook
+    var noteList = this.DB_Note_List();
+    for (var i = 0; i < noteList.length; i++) {
+      if (noteList[i].refNotebookId === notebookId) {
+        this.DB_Delete_Note(noteList[i].noteId)
+      }
+    }
+    localStorage.removeItem(notebookId)
+  }
+
+  /*
+  Creates a new note under a notebook
+  */
+  this.DB_Create_New_Note = function(notebookId, newNotebookName) {
+    var newNote = new this.objNote();
+    newNote.noteId = Get_New_Note_ID();
+    newNote.refNotebookId = notebookId;
+    newNote.noteName = newNotebookName;
+    newNote.notes = "";
+    this.DB_Save_Note(newNote)
   }
 
   /*
@@ -137,17 +177,32 @@ var Notebook_Mngr = function() {
   /*
   Deletes a note from storage
   */
-  this.DB_Delete_Note = function(note_to_delete) {
-    if (!(note_to_delete instanceof this.objNote)) {
-      console.log("Object passed in is not of type objNote.");
-      return false;
-    }
-
-    var myKey = pGenerateNoteKey(note_to_delete)
-    localStorage.removeItem(myKey)
+  this.DB_Delete_Note = function(note_key_to_delete) {
+    localStorage.removeItem(note_key_to_delete)
   }
 
   /*
+  Private
+  Gets the current max notebook ID from local storage and increments it
+  */
+  var Get_New_Notebook_ID = function() {
+    currentNotebookIndex += 1
+    localStorage.setItem(KEY_NOTEBOOK_INDEX, currentNotebookIndex)
+    return "NB" + currentNotebookIndex
+  }
+
+  /*
+  Private
+  Gets the current max note ID from local storage and increments it
+  */
+  var Get_New_Note_ID = function() {
+    currentNoteIndex += 1
+    localStorage.setItem(KEY_NOTE_INDEX, currentNoteIndex)
+    return "NT" + currentNoteIndex
+  }
+
+  /*
+  Private
   Generates the flash card objects for a note
   */
   var Generate_Flash_Cards = function(note) {

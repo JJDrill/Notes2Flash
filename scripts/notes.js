@@ -191,6 +191,14 @@ $(function(){
     }
   }
 
+  Build_Menu = function() {
+    $('.notebookMenuItem').remove();
+    var noteBookList = notebookMngr.DB_Get_Notebook_List();
+    var noteList = notebookMngr.DB_Note_List();
+    var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
+    $('#accordion').append(navToBuild);
+  }
+
   ShowHide_Flash_Card_Edit = function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
@@ -299,7 +307,37 @@ $(function(){
     tinymce.activeEditor.selection.moveToBookmark(bm);
   }
 
-  tinymce.PluginManager.add('wordDefinition', function(editor, url) {
+  // Add new notebook
+  $('.addNotebook').on('click', function() {
+    var newNotebookName = prompt("Please enter the new notebook name", "New Notebook");
+    // TODO: Validate name
+    if (newNotebookName != null) {
+      notebookMngr.DB_Create_New_Notebook(newNotebookName)
+    }
+    Build_Menu()
+  })
+
+  // Delete notebook click
+  $(document).on('click', '.deleteNotebook', function(event){
+    var notebookIdToDelete = event.target.parentNode.parentNode.dataset.notebookid
+    var notebookNameToDelete = event.target.parentNode.parentNode.dataset.notebookname
+
+    var r = confirm("Are you sure you want to delete the notebook " + notebookNameToDelete + "?");
+    if (r == true) {
+      notebookMngr.DB_Delete_Notebook(notebookIdToDelete)
+      Build_Menu()
+    }
+  })
+
+  // Create a new note
+  $(document).on('click', '.createNewNote', function(event){
+    var notebookID = event.target.parentNode.parentNode.dataset.notebookid
+    var newNoteName = prompt("Please enter the new note name", "New Note")
+    notebookMngr.DB_Create_New_Note(notebookID, newNoteName)
+    Build_Menu()
+  })
+
+  tinymce.PluginManager.add('lowerMenu', function(editor, url) {
       // Add our word definition button
       editor.addButton('wordDefinition', {
           text: 'Get Definition',
@@ -316,6 +354,36 @@ $(function(){
           icon: false,
           onclick: function() {
             ShowHide_Flash_Card_Edit();
+          }
+      });
+
+      // Add our rename note button
+      editor.addButton('saveNote', {
+          text: 'Save',
+          icon: false,
+          onclick: function() {
+            //ShowHide_Flash_Card_Edit();
+          }
+      });
+
+      // Add our rename note button
+      editor.addButton('renameNote', {
+          text: 'Rename',
+          icon: false,
+          onclick: function() {
+            //ShowHide_Flash_Card_Edit();
+          }
+      });
+
+      // Add our delete note button
+      editor.addButton('deleteNote', {
+          text: 'Delete',
+          icon: false,
+          onclick: function() {
+            notebookMngr.DB_Delete_Note(noteBeingEdited.noteId)
+            Build_Menu()
+            currentSelectedNodeID = '';
+            noteBeingEdited = null;
           }
       });
   });
@@ -359,8 +427,5 @@ $(function(){
     notebookMngr.DB_Save_Notebook(myBook2)
   }
 
-  var noteBookList = notebookMngr.DB_Get_Notebook_List();
-  var noteList = notebookMngr.DB_Note_List();
-  var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
-  $('#accordion').append(navToBuild);
+  Build_Menu();
 });

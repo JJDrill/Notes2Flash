@@ -26,24 +26,30 @@ var File_Manager = function() {
     return returnString
   }
 
-  this.Add_Notebook_Node = function(name) {
-  }
-
-  this.Add_Note_Node = function(name, parent) {
-  }
-
   var pGet_Notebook = function(notebookId, notebookName, notebookIndex) {
 
     var response =
-    '<div class="panel panel-default">' +
+    '<div class="panel panel-default notebookMenuItem">' +
       '<div class="panel-heading" role="tab" id="' + notebookId + '">' +
         '<h4 class="panel-title">' +
           '<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' + notebookIndex + '" aria-expanded="false" aria-controls="collapse' + notebookIndex + '">' +
             notebookName +
           '</a>' +
+
+          '<span class="pull-right dropdown">' +
+            '<button class="btn btn-xs dropdown-toggle notebookOptions" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">' +
+               '<span class="glyphicon glyphicon-option-horizontal"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" data-notebookID="' + notebookId + '" data-notebookName="' + notebookName + '" aria-labelledby="dropdownMenu1">' +
+              '<li><a class="createNewNote" href="#">Add New Note</a></li>' +
+              '<li role="separator" class="divider"></li>' +
+              '<li><a class="renameNote" href="#">Rename Notebook</a></li>' +
+              '<li><a class="deleteNotebook" href="#">Delete Notebook</a></li>' +
+              // '<li><a class="deleteNotebook" data-toggle="modal" data-target="#confirmNotebookDelete" data-notebookID="' + notebookId + '" data-notebookName="' + notebookName + '" href="#">Delete Notebook</a></li>' +
+            '</ul>' +
+          '</span>' +
         '</h4>' +
       '</div>' +
-      //'<div id="collapse' + notebookIndex + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading' + notebookIndex + '">' +
       '<div id="collapse' + notebookIndex + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + notebookIndex + '">' +
         '<div class="list-group noteList">'
 
