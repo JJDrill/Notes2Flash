@@ -138,13 +138,11 @@ $(function(){
   // }
 
   Navigate_Flash_Cards = function(direction) {
-debugger;
     // do nothing if the flash card array isn't populated
     //debugger;
     if (noteBeingEdited.flashCards.length === 0) {
       return;
     }
-console.log('TEST!!');
     // handle the index modification first
     if ('first' === direction) {
       currentNodeFlashIndex = 0;
@@ -231,6 +229,18 @@ console.log('TEST!!');
     }
   }
 
+  ShowHide_Note_Edit_Panel = function(action) {
+    var editor_id = $(tinymce.activeEditor).attr('id');
+
+    if (action === 'hide') {
+      tinymce.get(editor_id).hide();
+      $('#notesText')[0].hidden = true;
+    } else if (action === 'show') {
+      tinymce.get(editor_id).show();
+      $('#notesText')[0].hidden = false;
+    }
+  }
+
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
     Navigate_Flash_Cards('previous');
@@ -243,8 +253,8 @@ console.log('TEST!!');
 
   // Handle user clicking on a Note to open it
   $(document).on('click', '.linkOpenNote', function(e){
+    ShowHide_Note_Edit_Panel('show');
     //save the content first if the node changed
-    debugger;
     if (currentSelectedNodeID !== e.currentTarget.id &&
         currentSelectedNodeID !== "") {
       var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
@@ -320,7 +330,7 @@ console.log('TEST!!');
           text: 'Rename',
           icon: false,
           onclick: function() {
-            //ShowHide_Flash_Card_Edit();
+            ShowHide_Note_Edit_Panel('hide');
           }
       });
 
@@ -333,8 +343,25 @@ console.log('TEST!!');
             Build_Menu()
             currentSelectedNodeID = '';
             noteBeingEdited = null;
+            ShowHide_Note_Edit_Panel('hide')
           }
       });
+  });
+
+  tinymce.init({
+    selector:'textarea',
+    plugins: 'lowerMenu',
+    menubar: false,
+    toolbar1: 'undo redo | bold italic | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify',
+    toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
+    statusbar: false,
+    // Initially hide the notes area
+    setup: function(editor) {
+        editor.on('init', function(e) {
+            console.log('init event', e);
+            ShowHide_Note_Edit_Panel('hide');
+        });
+    }
   });
 
   var indexMngr = new Index_Manager();
