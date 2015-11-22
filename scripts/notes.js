@@ -138,12 +138,13 @@ $(function(){
   // }
 
   Navigate_Flash_Cards = function(direction) {
+debugger;
     // do nothing if the flash card array isn't populated
     //debugger;
     if (noteBeingEdited.flashCards.length === 0) {
       return;
     }
-
+console.log('TEST!!');
     // handle the index modification first
     if ('first' === direction) {
       currentNodeFlashIndex = 0;
@@ -199,96 +200,6 @@ $(function(){
     $('#accordion').append(navToBuild);
   }
 
-  ShowHide_Flash_Card_Edit = function() {
-    if ($('.flashCardEditPanel').hasClass('collapse')) {
-      $('.flashCardEditPanel').removeClass('collapse')
-      Navigate_Flash_Cards('first');
-      //console.log($('.notesTextArea'));
-      $('#notesText_ifr').css('height', '40vh')
-
-    } else {
-      $('.flashCardEditPanel').addClass('collapse')
-      Unhighlight_All_Notes()
-      $('#notesText_ifr').css('height', '63vh')
-    }
-  }
-
-  // Flash card previous button
-  $('button[name=btnFlashCardPrevious]').on('click', function() {
-    Navigate_Flash_Cards('previous');
-  })
-
-  // Flash card forward button
-  $('button[name=btnFlashCardForward]').on('click', function() {
-    Navigate_Flash_Cards('next');
-  })
-
-  // Handle user clicking on a Note
-  $(document).on('click', '.note', function(e){
-    //save the content first if the node changed
-    if (currentSelectedNodeID !== e.currentTarget.id &&
-        currentSelectedNodeID !== "") {
-      var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
-      noteToUpdate.notes = Get_Notes('string');
-      notebookMngr.DB_Save_Note(noteToUpdate)
-    }
-    //now open the new note
-    noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
-    Put_Notes(noteBeingEdited.notes)
-    currentSelectedNodeID = e.currentTarget.id;
-  });
-
-  // $('#jstree_demo_div').on("changed.jstree", function (e, data) {
-  //   if (data.action === 'select_node') {
-  //
-  //     //check if it's a note, if it is open it!
-  //     if (data.selected[0].substring(0,2) === "NT") {
-  //       //save the content first if the node changed
-  //       if (currentSelectedNodeID !== data.selected[0] &&
-  //           currentSelectedNodeID !== "") {
-  //         var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
-  //         noteToUpdate.notes = Get_Notes('string');
-  //         notebookMngr.DB_Save_Note(noteToUpdate)
-  //       }
-  //       //now open the new note
-  //       noteBeingEdited = notebookMngr.DB_Get_Note(data.selected[0])
-  //       Put_Notes(noteBeingEdited.notes)
-  //       currentSelectedNodeID = data.selected[0];
-  //
-  //     // check if the user clicked on the new notebook node
-  //     } else if (data.selected[0].substring(0,NEW_NOTEBOOK_ID.length) === NEW_NOTEBOOK_ID) {
-  //       var newNotebookName = prompt("Please enter the new notebook name", "New Notebook");
-  //
-  //       if (newNotebookName != null) {
-  //         var newBook = new notebookMngr.objNotebook();
-  //         newBook.notebook_id = indexMngr.Get_New_Notebook_ID();;
-  //         newBook.notebook_name = newNotebookName;
-  //         notebookMngr.DB_Save_Notebook(newBook)
-  //
-  //         //refresh the tree
-  //         var fullList = notebookMngr.DB_Get_Full_List();
-  //         Update_Tree(fullList)
-  //       }
-  //
-  //     // check if the user clicked on the new note node
-  //     } else if (data.selected[0].substring(0,NEW_NOTE_ID.length) === NEW_NOTE_ID) {
-  //       var newNotebookName = prompt("Please enter the new note name", "New Note");
-  //       if (newNotebookName != null) {
-  //         var newNote = new notebookMngr.objNote();
-  //         newNote.noteId = indexMngr.Get_New_Note_ID();
-  //         newNote.refNotebookId = data.node.parents[0];
-  //         newNote.noteName = newNotebookName;
-  //         newNote.notes = "";
-  //         notebookMngr.DB_Save_Note(newNote)
-  //
-  //         //refresh the tree
-  //         var fullList = notebookMngr.DB_Get_Full_List();
-  //         Update_Tree(fullList)
-  //       }
-  //     }
-  //   }
-  // });
-
   Get_Word_Definition = function() {
     // set a bookmark first
     var bm = tinymce.activeEditor.selection.getBookmark();
@@ -306,6 +217,45 @@ $(function(){
     //go back to the line we were on using our bookmark
     tinymce.activeEditor.selection.moveToBookmark(bm);
   }
+
+  ShowHide_Flash_Card_Edit = function() {
+    if ($('.flashCardEditPanel').hasClass('collapse')) {
+      $('.flashCardEditPanel').removeClass('collapse')
+      Navigate_Flash_Cards('first');
+      $('#notesText').css('height', '40vh')
+
+    } else {
+      $('.flashCardEditPanel').addClass('collapse')
+      Unhighlight_All_Notes()
+      $('#notesText').css('height', '63vh')
+    }
+  }
+
+  // Flash card previous button
+  $('button[name=btnFlashCardPrevious]').on('click', function() {
+    Navigate_Flash_Cards('previous');
+  })
+
+  // Flash card forward button
+  $('button[name=btnFlashCardForward]').on('click', function() {
+    Navigate_Flash_Cards('next');
+  })
+
+  // Handle user clicking on a Note to open it
+  $(document).on('click', '.linkOpenNote', function(e){
+    //save the content first if the node changed
+    debugger;
+    if (currentSelectedNodeID !== e.currentTarget.id &&
+        currentSelectedNodeID !== "") {
+      var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
+      noteToUpdate.notes = Get_Notes('string');
+      notebookMngr.DB_Save_Note(noteToUpdate)
+    }
+    //now open the new note
+    noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
+    Put_Notes(noteBeingEdited.notes)
+    currentSelectedNodeID = e.currentTarget.id;
+  });
 
   // Add new notebook
   $('.addNotebook').on('click', function() {
@@ -343,7 +293,6 @@ $(function(){
           text: 'Get Definition',
           icon: false,
           onclick: function() {
-            //console.log('test!!!');
             Get_Word_Definition();
           }
       });

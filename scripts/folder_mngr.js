@@ -57,7 +57,7 @@ var File_Manager = function() {
   }
 
   var pGet_Note = function(noteID, noteName) {
-    return '<button id="' + noteID + '" type="button" class="list-group-item note">' + noteName + '</button>'
+    return '<button id="' + noteID + '" type="button" class="list-group-item linkOpenNote">' + noteName + '</button>'
   }
 
 }
