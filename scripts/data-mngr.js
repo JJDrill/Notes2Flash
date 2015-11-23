@@ -113,6 +113,18 @@ var Notebook_Mngr = function() {
     localStorage.setItem(notebook.notebook_id, string_to_save)
   }
 
+  /*
+  Retrieves a notebook from storage
+  */
+  this.DB_Get_Notebook = function(notebook_key) {
+    var dataToCopy = JSON.parse( localStorage.getItem(notebook_key) )
+
+    var returnItem = new this.objNotebook();
+    returnItem.notebook_id = dataToCopy.notebook_id;
+    returnItem.notebook_name = dataToCopy.notebook_name;
+    return returnItem;
+  };
+
   this.DB_Delete_Notebook = function(notebookId) {
     // First delete all associated notes, then the notebook
     var noteList = this.DB_Note_List();

@@ -179,6 +179,10 @@ $(function(){
     }
   }
 
+  Rename_Notebook = function(newNotebookName) {
+
+  }
+
   Save_Open_Note = function() {
     var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
     noteToUpdate.notes = Get_Notes('string');
@@ -231,6 +235,17 @@ $(function(){
     }
   })
 
+  // Rename notebook click
+  $(document).on('click', '.renameNotebook', function(event) {
+    var notebookId = event.target.parentNode.parentNode.dataset.notebookid
+    var notebookName = event.target.parentNode.parentNode.dataset.notebookname
+    var newNotebookName = prompt("Please enter the new notebook name for notebook " + notebookName + ".")
+    var book = notebookMngr.DB_Get_Notebook(notebookId)
+    book.notebook_name = newNotebookName
+    notebookMngr.DB_Save_Notebook(book)
+    Build_Menu()
+  })
+
   // Create a new note
   $(document).on('click', '.createNewNote', function(event){
     var notebookID = event.target.parentNode.parentNode.dataset.notebookid
@@ -258,7 +273,7 @@ $(function(){
           }
       });
 
-      // Add our rename note button
+      // Add our save note button
       editor.addButton('saveNote', {
           text: 'Save',
           icon: false,

@@ -43,7 +43,7 @@ var File_Manager = function() {
             '<ul class="dropdown-menu" data-notebookID="' + notebookId + '" data-notebookName="' + notebookName + '" aria-labelledby="dropdownMenu1">' +
               '<li><a class="createNewNote" href="#">Add New Note</a></li>' +
               '<li role="separator" class="divider"></li>' +
-              '<li><a class="renameNote" href="#">Rename Notebook</a></li>' +
+              '<li><a class="renameNotebook" href="#">Rename Notebook</a></li>' +
               '<li><a class="deleteNotebook" href="#">Delete Notebook</a></li>' +
               // '<li><a class="deleteNotebook" data-toggle="modal" data-target="#confirmNotebookDelete" data-notebookID="' + notebookId + '" data-notebookName="' + notebookName + '" href="#">Delete Notebook</a></li>' +
             '</ul>' +
