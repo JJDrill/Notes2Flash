@@ -158,12 +158,12 @@ $(function(){
     if ($('.flashCardEditPanel').hasClass('collapse')) {
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
-      $('#notesText').css('height', '40vh')
+      $('#notesText_ifr').css('height', '40vh')
 
     } else {
       $('.flashCardEditPanel').addClass('collapse')
       Unhighlight_All_Notes()
-      $('#notesText').css('height', '63vh')
+      $('#notesText_ifr').css('height', '63vh')
     }
   }
 
