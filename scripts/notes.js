@@ -287,7 +287,11 @@ $(function(){
           text: 'Rename',
           icon: false,
           onclick: function() {
-            ShowHide_Note_Edit_Panel('hide');
+            var newNoteName = prompt("Please enter the new name for this note.")
+            noteBeingEdited.noteName = newNoteName
+            notebookMngr.DB_Save_Note(noteBeingEdited)
+            ShowHide_Note_Edit_Panel('hide')
+            Build_Menu()
           }
       });
 
@@ -314,7 +318,7 @@ $(function(){
     menubar: false,
     toolbar1: 'undo redo | bold italic | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify',
     //toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
-    toolbar2: 'wordDefinition | flashEdit | saveNote | deleteNote',
+    toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
     statusbar: false,
     // Initially hide the notes area
     setup: function(editor) {
