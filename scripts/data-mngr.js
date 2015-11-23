@@ -134,6 +134,7 @@ var Notebook_Mngr = function() {
     newNote.noteName = newNotebookName;
     newNote.notes = "";
     this.DB_Save_Note(newNote)
+    return newNote;
   }
 
   /*

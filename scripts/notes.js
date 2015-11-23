@@ -57,7 +57,7 @@ $(function(){
   */
   Unhighlight_All_Notes = function() {
     var notesArray = Get_Notes('array')
-
+//debugger;
     for (var i = 0; i < notesArray.length; i++) {
       var lineElements = $(notesArray[i])
 
@@ -77,7 +77,7 @@ $(function(){
 
   Navigate_Flash_Cards = function(direction) {
     // do nothing if the flash card array isn't populated
-    //debugger;
+//debugger;
     if (noteBeingEdited.flashCards.length === 0) {
       return;
     }
@@ -179,6 +179,12 @@ $(function(){
     }
   }
 
+  Save_Open_Note = function() {
+    var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
+    noteToUpdate.notes = Get_Notes('string');
+    notebookMngr.DB_Save_Note(noteToUpdate)
+  }
+
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
     Navigate_Flash_Cards('previous');
@@ -195,9 +201,7 @@ $(function(){
     //save the content first if the node changed
     if (currentSelectedNodeID !== e.currentTarget.id &&
         currentSelectedNodeID !== "") {
-      var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
-      noteToUpdate.notes = Get_Notes('string');
-      notebookMngr.DB_Save_Note(noteToUpdate)
+      Save_Open_Note()
     }
     //now open the new note
     noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
@@ -211,8 +215,8 @@ $(function(){
     // TODO: Validate name
     if (newNotebookName != null) {
       notebookMngr.DB_Create_New_Notebook(newNotebookName)
+      Build_Menu()
     }
-    Build_Menu()
   })
 
   // Delete notebook click
@@ -259,7 +263,7 @@ $(function(){
           text: 'Save',
           icon: false,
           onclick: function() {
-            //ShowHide_Flash_Card_Edit();
+            Save_Open_Note()
           }
       });
 
@@ -295,7 +299,7 @@ $(function(){
     menubar: false,
     toolbar1: 'undo redo | bold italic | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify',
     //toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
-    toolbar2: 'wordDefinition | flashEdit | deleteNote',
+    toolbar2: 'wordDefinition | flashEdit | saveNote | deleteNote',
     statusbar: false,
     // Initially hide the notes area
     setup: function(editor) {
@@ -317,31 +321,42 @@ $(function(){
   Insert some test data if they have an empty local storage
   */
   if (localStorage.length === 0) {
+    var book1 = notebookMngr.DB_Create_New_Notebook("Example Notebook")
+    var note1 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Example Note 1")
+    note1.notes = "<p>Example Note</p>\n" +
+    "<p>While this note is open click the 'Flash Card Edit' button above. Then at the bottom of the page use the left and right buttons to scroll through the flash cards which were generated.</p>\n" +
+    "<p>&nbsp;</p>\n" +
+    "<p>Example Question 1</p>\n" +
+    "<ul>\n" +
+      "<li>Answer 1</li>\n" +
+      "<li>Answer 2</li>\n" +
+      "<li>Answer 3</li>\n" +
+    "</ul>\n" +
+    "<p>&nbsp;</p>\n" +
+    "<p>Example Question 2</p>\n" +
+    "<ul>\n" +
+      "<li>Answer/Question</li>\n" +
+      "<li>Answer/Question</li>\n" +
+        "<ul>\n" +
+          "<li>Answer 1</li>\n" +
+          "<li>Answer 2</li>\n" +
+        "</ul>\n" +
+      "<li>Answer/Question</li>\n" +
+        "<ul>\n" +
+          "<li>Answer 3</li>\n" +
+          "<li>Answer 4</li>\n" +
+        "</ul>\n" +
+      "<li>Answer/Question</li>\n" +
+        "<ul>\n" +
+          "<li>Answer 5</li>\n" +
+          "<li>Answer 6</li>\n" +
+        "</ul>\n" +
+      "<li>Answer 7</li>\n" +
+    "</ul>\n" +
+    "<p>&nbsp;</p>\n"
 
-    var Book1ID = indexMngr.Get_New_Notebook_ID();
-    var myBook1 = new notebookMngr.objNotebook();
-    myBook1.notebook_id = Book1ID;
-    myBook1.notebook_name = "Default Notebook #1";
-    notebookMngr.DB_Save_Notebook(myBook1)
-
-    var myNote = new notebookMngr.objNote();
-    myNote.noteId = indexMngr.Get_New_Note_ID();
-    myNote.refNotebookId = Book1ID;
-    myNote.noteName = "Note 1";
-    myNote.notes = "Test note data 1";
-    notebookMngr.DB_Save_Note(myNote)
-
-    var myNote1 = new notebookMngr.objNote();
-    myNote1.noteId = indexMngr.Get_New_Note_ID();
-    myNote1.refNotebookId = Book1ID;
-    myNote1.noteName = "Note 2";
-    myNote1.notes = "Test note data 2";
-    notebookMngr.DB_Save_Note(myNote1)
-
-    var myBook2 = new notebookMngr.objNotebook();
-    myBook2.notebook_id = indexMngr.Get_New_Notebook_ID();
-    myBook2.notebook_name = "Default Notebook #2";
-    notebookMngr.DB_Save_Notebook(myBook2)
+    var note2 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Example Note 2")
+    notebookMngr.DB_Save_Note(note1)
   }
 
   Build_Menu();
