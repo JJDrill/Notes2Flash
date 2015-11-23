@@ -75,68 +75,6 @@ $(function(){
     Put_Notes(notesArray)
   }
 
-  // /*
-  // Update tree with new info
-  // */
-  // Update_Tree = function(listData) {
-  //   // build the data array
-  //   var dataArray = []
-  //
-  //   // add the default "add new note" node for each notebook at the start
-  //   var defaultNewNotebook = {
-  //     "id" : NEW_NOTEBOOK_ID,
-  //     "parent" : "#",
-  //     "text" : NEW_NOTEBOOK_TEXT,
-  //     "icon" : "glyphicon glyphicon-option-horizontal"
-  //   }
-  //   dataArray.push(defaultNewNotebook)
-  //
-  //   for (var i = 0; i < listData.length; i++) {
-  //     // for notebook objects
-  //     if (listData[i] instanceof notebookMngr.objNotebook) {
-  //
-  //       // add the default "add new note" node for each notebook at the start
-  //       var defaultNewNote = {
-  //         "id" : NEW_NOTE_ID + listData[i].notebook_id,
-  //         "parent" : listData[i].notebook_id,
-  //         "text" : NEW_NOTE_TEXT,
-  //         "icon" : "glyphicon glyphicon-option-horizontal"
-  //       }
-  //       dataArray.push(defaultNewNote)
-  //
-  //       //now add the notebook node
-  //       var newItem = {
-  //         "id" : listData[i].notebook_id,
-  //         "parent" : "#",
-  //         "text" : listData[i].notebook_name,
-  //         "icon" : "glyphicon glyphicon-folder-open"
-  //       }
-  //       dataArray.push(newItem)
-  //
-  //     // for note objects
-  //     } else if (listData[i] instanceof notebookMngr.objNote) {
-  //       var newItem = {
-  //         "id" : listData[i].noteId,
-  //         "parent" : listData[i].refNotebookId,
-  //         "text" : listData[i].noteName,
-  //         "icon" : "glyphicon glyphicon-file"
-  //       }
-  //       dataArray.push(newItem)
-  //     }
-  //   }
-  //
-  //   $('#jstree_demo_div').jstree('deselect_all');
-  //   $('#jstree_demo_div').jstree(
-  //     { 'core' : {
-  //       'check_callback': true,
-  //       'cache' : false,
-  //       'data' : dataArray
-  //   } });
-  //   //$('#jstree_demo_div').jstree(true).redraw(true);
-  //   //$('#jstree_demo_div').jstree(true).refresh();
-  //   $("#jstree_demo_div").jstree('refresh');
-  // }
-
   Navigate_Flash_Cards = function(direction) {
     // do nothing if the flash card array isn't populated
     //debugger;
@@ -339,11 +277,14 @@ $(function(){
           text: 'Delete',
           icon: false,
           onclick: function() {
-            notebookMngr.DB_Delete_Note(noteBeingEdited.noteId)
-            Build_Menu()
-            currentSelectedNodeID = '';
-            noteBeingEdited = null;
-            ShowHide_Note_Edit_Panel('hide')
+            var r = confirm("Are you sure you want to delete this note?");
+            if (r === true) {
+              notebookMngr.DB_Delete_Note(noteBeingEdited.noteId)
+              Build_Menu()
+              currentSelectedNodeID = '';
+              noteBeingEdited = null;
+              ShowHide_Note_Edit_Panel('hide')
+            }
           }
       });
   });
@@ -353,12 +294,12 @@ $(function(){
     plugins: 'lowerMenu',
     menubar: false,
     toolbar1: 'undo redo | bold italic | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify',
-    toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
+    //toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
+    toolbar2: 'wordDefinition | flashEdit | deleteNote',
     statusbar: false,
     // Initially hide the notes area
     setup: function(editor) {
         editor.on('init', function(e) {
-            console.log('init event', e);
             ShowHide_Note_Edit_Panel('hide');
         });
     }
