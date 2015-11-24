@@ -9,7 +9,6 @@ Notes2Flash parses the notes you already have into question and answer flash car
 •	Bootstrap with a Bootswatch Theme (https://bootswatch.com/)
 •	JQuery
 •	tinyMCE (http://www.tinymce.com/)
-•	jsTree (https://www.jstree.com/)
 •	Dictionary API (https://market.mashape.com/montanaflynn/dictionary)
 •	GULP
 
