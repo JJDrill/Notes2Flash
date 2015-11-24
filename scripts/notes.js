@@ -340,7 +340,6 @@ $(function(){
     }
   });
 
-  var indexMngr = new Index_Manager();
   var notebookMngr = new Notebook_Mngr();
   var mngrDictionary = new Dictionary_Mngr();
   var mngrFolder = new File_Manager();
