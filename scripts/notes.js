@@ -342,42 +342,57 @@ $(function(){
   Insert some test data if they have an empty local storage
   */
   if (localStorage.length === 0) {
-    var book1 = notebookMngr.DB_Create_New_Notebook("Example Notebook")
-    var note1 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Example Note 1")
-    note1.notes = "<p>Example Note</p>\n" +
-    "<p>While this note is open click the 'Flash Card Edit' button above. Then at the bottom of the page use the left and right buttons to scroll through the flash cards which were generated.</p>\n" +
+    var book1 = notebookMngr.DB_Create_New_Notebook("Readme and Example Notebook")
+    var note1 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Readme")
+    note1.notes = "<p><b>Example Note</b></p>\n" +
+    "<p>You can use the 'Example Note' to test out the auto-generation of notes.</p>\n" +
     "<p>&nbsp;</p>\n" +
-    "<p>Example Question 1</p>\n" +
+    "<p><b>Please Note!</b></p>\n" +
+    "<p>The application can only support entering text into the text field directly. Copy/Paste support from other applications can break the auto-generation at this time. Other things might break the auto-generation too, but I'm quickly working to find those cases.  :)</p>\n" +
+    "<p>&nbsp;</p>\n"
+    notebookMngr.DB_Save_Note(note1)
+
+    var note2 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Example Note")
+    note2.notes = "<p><b>Example Note</b></p>\n" +
+    "<p>While this note is open click the 'Flash Card Edit' button above to go in and out of flash card edit mode. At the bottom of the page the flash cards will open up and you can use the left and right buttons to scroll through the flash cards which were auto-generated.</p>\n" +
+    "<p>&nbsp;</p>\n" +
+    "<p>You will see some list items which are an answer and a question. When it's a quesiton it helps to think of prefacing 'Give details of...' or 'Give more information on...' to the question. For example, the item 'Main Sail' is a question and an answer, so when it's the question you might want to ask 'Give more information on a Main Sail'.</p>\n" +
+    "<p>&nbsp;</p>\n" +
+    "<p>Common types of modern keels on sailboats.</p>\n" +
     "<ul>\n" +
-      "<li>Answer 1</li>\n" +
-      "<li>Answer 2</li>\n" +
-      "<li>Answer 3</li>\n" +
+      "<li>Full keel</li>\n" +
+      "<li>Fin keel</li>\n" +
+      "<li>Centerboard</li>\n" +
     "</ul>\n" +
     "<p>&nbsp;</p>\n" +
-    "<p>Example Question 2</p>\n" +
+    "<p>Common types of sails on a mondern sloop rig sailboat.</p>\n" +
     "<ul>\n" +
-      "<li>Answer/Question</li>\n" +
-      "<li>Answer/Question</li>\n" +
+      "<li>Main Sail</li>\n" +
         "<ul>\n" +
-          "<li>Answer 1</li>\n" +
-          "<li>Answer 2</li>\n" +
+          "<li>Used with upwind and downwind sailing</li>\n" +
+          "<li>Aft of the mast</li>\n" +
+          "<li>Attached to the boom</li>\n" +
         "</ul>\n" +
-      "<li>Answer/Question</li>\n" +
+      "<li>Genoa</li>\n" +
         "<ul>\n" +
-          "<li>Answer 3</li>\n" +
-          "<li>Answer 4</li>\n" +
+          "<li>Used with upwind and downwind sailing</li>\n" +
+          "<li>Forward of the mast</li>\n" +
         "</ul>\n" +
-      "<li>Answer/Question</li>\n" +
+      "<li>Spinnaker</li>\n" +
         "<ul>\n" +
-          "<li>Answer 5</li>\n" +
-          "<li>Answer 6</li>\n" +
+          "<li>Downwind sailing only</li>\n" +
+          "<li>Symmetrical</li>\n" +
+          "<li>Uses a spinnaker pole</li>\n" +
         "</ul>\n" +
-      "<li>Answer 7</li>\n" +
+      "<li>Gennaker</li>\n" +
+        "<ul>\n" +
+          "<li>Downwind sailing only</li>\n" +
+          "<li>Asymmetrical</li>\n" +
+          "<li>Uses a bowsprit</li>\n" +
+        "</ul>\n" +
     "</ul>\n" +
     "<p>&nbsp;</p>\n"
-
-    var note2 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Example Note 2")
-    notebookMngr.DB_Save_Note(note1)
+    notebookMngr.DB_Save_Note(note2)
   }
 
   Build_Menu();
