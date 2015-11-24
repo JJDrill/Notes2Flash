@@ -57,7 +57,6 @@ $(function(){
   */
   Unhighlight_All_Notes = function() {
     var notesArray = Get_Notes('array')
-//debugger;
     for (var i = 0; i < notesArray.length; i++) {
       var lineElements = $(notesArray[i])
 
@@ -77,7 +76,6 @@ $(function(){
 
   Navigate_Flash_Cards = function(direction) {
     // do nothing if the flash card array isn't populated
-//debugger;
     if (noteBeingEdited.flashCards.length === 0) {
       return;
     }
@@ -129,7 +127,7 @@ $(function(){
   }
 
   Build_Menu = function() {
-    $('.notebookMenuItem').remove();
+    $('.notebookMenu').remove();
     var noteBookList = notebookMngr.DB_Get_Notebook_List();
     var noteList = notebookMngr.DB_Note_List();
     var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
@@ -179,10 +177,6 @@ $(function(){
     }
   }
 
-  Rename_Notebook = function(newNotebookName) {
-
-  }
-
   Save_Open_Note = function() {
     var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
     noteToUpdate.notes = Get_Notes('string');
@@ -197,6 +191,14 @@ $(function(){
   // Flash card forward button
   $('button[name=btnFlashCardForward]').on('click', function() {
     Navigate_Flash_Cards('next');
+  })
+
+  // Handle when a user clicks on the notebook links
+  $(document).on('click', '.notebookMenuItem', function(event) {
+    if ($(event.target).hasClass('collapsed')) {
+      Save_Open_Note()
+      ShowHide_Note_Edit_Panel('hide')
+    }
   })
 
   // Handle user clicking on a Note to open it

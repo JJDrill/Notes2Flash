@@ -29,10 +29,10 @@ var File_Manager = function() {
   var pGet_Notebook = function(notebookId, notebookName, notebookIndex) {
 
     var response =
-    '<div class="panel panel-default notebookMenuItem">' +
+    '<div class="panel panel-default notebookMenu">' +
       '<div class="panel-heading" role="tab" id="' + notebookId + '">' +
         '<h4 class="panel-title">' +
-          '<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' + notebookIndex + '" aria-expanded="false" aria-controls="collapse' + notebookIndex + '">' +
+          '<a class="collapsed notebookMenuItem" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse' + notebookIndex + '" aria-expanded="false" aria-controls="collapse' + notebookIndex + '">' +
             notebookName +
           '</a>' +
 
