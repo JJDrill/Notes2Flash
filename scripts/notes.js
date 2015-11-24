@@ -157,11 +157,13 @@ $(function(){
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
       $('#notesText_ifr').css('height', '40vh')
+      return 'shown'
 
     } else {
       $('.flashCardEditPanel').addClass('collapse')
       Unhighlight_All_Notes()
       $('#notesText_ifr').css('height', '63vh')
+      return 'hidden'
     }
   }
 
@@ -270,8 +272,16 @@ $(function(){
       editor.addButton('flashEdit', {
           text: 'Flash Card Edit',
           icon: false,
-          onclick: function() {
-            ShowHide_Flash_Card_Edit();
+          onclick: function(event) {
+            var flashPanelState = ShowHide_Flash_Card_Edit();
+            // set the button to change color when it's enabled
+            if (flashPanelState === 'shown') {
+              event.target.style.backgroundColor = 'yellow'
+              tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
+            } else if (flashPanelState === 'hidden') {
+              event.target.style.backgroundColor = ''
+              tinymce.activeEditor.getBody().setAttribute('contenteditable', true)
+            }
           }
       });
 
