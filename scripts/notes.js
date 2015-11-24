@@ -351,7 +351,7 @@ $(function(){
   /*
   Insert some test data if they have an empty local storage
   */
-  if (localStorage.length === 0) {
+  if (localStorage.getItem('FirstRun') === null) {
     var book1 = notebookMngr.DB_Create_New_Notebook("Readme and Example Notebook")
     var note1 = notebookMngr.DB_Create_New_Note(book1.notebook_id, "Readme")
     note1.notes = "<p><b>Example Note</b></p>\n" +
@@ -403,6 +403,9 @@ $(function(){
     "</ul>\n" +
     "<p>&nbsp;</p>\n"
     notebookMngr.DB_Save_Note(note2)
+
+    // local storage flag showing if this content has been displayed
+    localStorage.setItem('FirstRun', 'true')
   }
 
   Build_Menu();
