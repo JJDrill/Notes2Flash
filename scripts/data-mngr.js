@@ -188,6 +188,7 @@ var Notebook_Mngr = function() {
 
     var string_to_save = JSON.stringify(note_to_save)
     localStorage.setItem(note_to_save.noteId, string_to_save)
+    return note_to_save;
   };
 
   /*

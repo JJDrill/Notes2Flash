@@ -182,7 +182,7 @@ $(function(){
   Save_Open_Note = function() {
     var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
     noteToUpdate.notes = Get_Notes('string');
-    notebookMngr.DB_Save_Note(noteToUpdate)
+    noteBeingEdited = notebookMngr.DB_Save_Note(noteToUpdate)
   }
 
   // Flash card previous button
@@ -215,7 +215,6 @@ $(function(){
     noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
     Put_Notes(noteBeingEdited.notes)
     currentSelectedNodeID = e.currentTarget.id;
-console.log(noteBeingEdited);
   });
 
   // Add new notebook
@@ -274,6 +273,7 @@ console.log(noteBeingEdited);
           text: 'Flash Card Edit',
           icon: false,
           onclick: function(event) {
+            Save_Open_Note()
             var flashPanelState = ShowHide_Flash_Card_Edit();
             // set the button to change color when it's enabled
             if (flashPanelState === 'shown') {
