@@ -215,6 +215,7 @@ $(function(){
     noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
     Put_Notes(noteBeingEdited.notes)
     currentSelectedNodeID = e.currentTarget.id;
+console.log(noteBeingEdited);
   });
 
   // Add new notebook

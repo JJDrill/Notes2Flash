@@ -11,6 +11,9 @@ var Notebook_Mngr = function() {
   var currentNoteIndex = localStorage.getItem(KEY_NOTE_INDEX)
   currentNoteIndex = parseInt(currentNoteIndex, 10) || 0
 
+  var tabIncreaseTags = ['<ul>',  '<ol>']
+  var tabDecreaseTags = ['</ul>', '</ol>']
+
   /*
   Defines the notebook object
   */
@@ -229,9 +232,9 @@ var Notebook_Mngr = function() {
     */
     for (var i = 0; i < contentArray.length; i++) {
 
-      if ('<ul>' === contentArray[i]) {
+      if (tabIncreaseTags.indexOf(contentArray[i]) > -1) {
         tabIndex += 1;
-      } else if ('</ul>' === contentArray[i]) {
+      } else if (tabDecreaseTags.indexOf(contentArray[i]) > -1) {
         tabIndex -= 1;
       }
 
@@ -283,11 +286,12 @@ var Notebook_Mngr = function() {
   Used to check if a string is an ignored sting while we're parsing flash cards
   */
   var pIsIgnoredForFlash = function(line) {
-    if (line === "<ul>"  ||
-        line === "</ul>"  ||
-        line === "<p>&nbsp;</p>") {
+    if (tabIncreaseTags.indexOf(line) > -1) {
       return true;
-
+    } else if (tabDecreaseTags.indexOf(line) > -1) {
+      return true;
+    } else if (line === "<p>&nbsp;</p>") {
+      return true;
     } else {
       return false;
     }
