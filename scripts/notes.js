@@ -57,6 +57,7 @@ $(function(){
   */
   Unhighlight_All_Notes = function() {
     var notesArray = Get_Notes('array')
+
     for (var i = 0; i < notesArray.length; i++) {
       var lineElements = $(notesArray[i])
 
@@ -100,7 +101,6 @@ $(function(){
     // also highlight the needed lines in the note
     Unhighlight_All_Notes();
     var flashCardArray = noteBeingEdited.flashCards[currentNodeFlashIndex];
-
     $('.flashQuestion')[0].textContent = $(flashCardArray.lineContent).text();
     Highlight_Notes(flashCardArray.lineNumber, 'question')
     $('.flashAnswer')[0].textContent = ""
@@ -154,6 +154,7 @@ $(function(){
 
   ShowHide_Flash_Card_Edit = function() {
     if ($('.flashCardEditPanel').hasClass('collapse')) {
+      Save_Open_Note()
       $('.flashCardEditPanel').removeClass('collapse')
       Navigate_Flash_Cards('first');
       $('#notesText_ifr').css('height', '40vh')
@@ -273,7 +274,6 @@ $(function(){
           text: 'Flash Card Edit',
           icon: false,
           onclick: function(event) {
-            Save_Open_Note()
             var flashPanelState = ShowHide_Flash_Card_Edit();
             // set the button to change color when it's enabled
             if (flashPanelState === 'shown') {
@@ -327,10 +327,18 @@ $(function(){
 
   tinymce.init({
     selector:'textarea',
-    plugins: 'lowerMenu',
+    // valid_elements : "a[href|target=_blank],strong/b,div,br," +
+    //   "p[class]," +
+    //   "ol[class]," +
+    //   "ul[class]," +
+    //   "li[class]",
+    plugins: 'paste lowerMenu',
+    paste_auto_cleanup_on_paste : true,
+    paste_remove_styles: true,
+    paste_remove_styles_if_webkit: true,
+    paste_strip_class_attributes: true,
     menubar: false,
     toolbar1: 'undo redo | bold italic | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify',
-    //toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
     toolbar2: 'wordDefinition | flashEdit | saveNote | renameNote | deleteNote',
     statusbar: false,
     // Initially hide the notes area
