@@ -53,11 +53,48 @@
                 <span>
                   <button class="btn pull-right glyphicon glyphicon-plus-sign addNotebook" type="button" name="button">
                   </button>
+                  <!-- <button class="btn pull-right btnGenerateFlashCardTest" type="button" name="button">
+                  </button> -->
                 </span>
               </h3>
             </div>
             <div class="panel-body">
               <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+
+
+              <script id="menu-template" type="text/x-handlebars-template">
+                {{#each this}}
+                <div class="panel panel-default notebookMenu">
+                  <div class="panel-heading" role="tab" id="{{notebook_id}}">
+                    <h4 class="panel-title">
+                      <a class="collapsed notebookMenuItem" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{@index}}" aria-expanded="false" aria-controls="collapse{{@index}}">
+                        {{notebook_name}}
+                      </a>
+                      <span class="pull-right dropdown">
+                        <button class="btn btn-xs dropdown-toggle notebookOptions" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                           <span class="glyphicon glyphicon-option-horizontal"></span>
+                        </button>
+                        <ul class="dropdown-menu" data-notebookID="{{notebook_id}}" data-notebookName="{{notebook_name}}" aria-labelledby="dropdownMenu1">
+                          <li><a class="createNewNote" href="#">Add New Note</a></li>
+                          <li role="separator" class="divider"></li>
+                          <li><a class="renameNotebook" href="#">Rename Notebook</a></li>
+                          <li><a class="deleteNotebook" href="#">Delete Notebook</a></li>
+                        </ul>
+                      </span>
+                    </h4>
+                  </div>
+                  <div id="collapse{{@index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{@index}}">
+                    <div class="list-group noteList">
+                      {{#each noteList}}
+                      <button id="{{noteId}}" type="button" class="list-group-item linkOpenNote">{{noteName}}</button>
+                      {{/each}}
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
+              </script>
+
+
             </div>
           </div>
         </div>
@@ -99,7 +136,7 @@
 
       </div>
       <!-- Modal -->
-      <div class="modal fade" id="confirmNotebookDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <!-- <div class="modal fade" id="confirmNotebookDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -115,7 +152,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </main>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -124,6 +161,7 @@
     <!-- TinyMCE rich text editor -->
     <script src="./tinymce/tinymce.min.js"></script>
     <script type="text/javascript" src="./scripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="./scripts/handlebars-v4.0.5.js"></script>
     <script type="text/javascript" src="./scripts/notes.js"></script>
     <script type="text/javascript" src="./scripts/data-mngr.js"></script>
     <script type="text/javascript" src="./scripts/dictionary.js"></script>

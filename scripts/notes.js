@@ -127,11 +127,12 @@ $(function(){
   }
 
   Build_Menu = function() {
-    $('.notebookMenu').remove();
     var noteBookList = notebookMngr.DB_Get_Notebook_List();
-    var noteList = notebookMngr.DB_Note_List();
-    var navToBuild = mngrFolder.Build_List(noteBookList, noteList);
-    $('#accordion').append(navToBuild);
+    $('.notebookMenu').remove();
+    var source    = $("#menu-template").html();
+    var template  = Handlebars.compile(source);
+    var html      = template(noteBookList);
+    $('#accordion').append(html);
   }
 
   Get_Word_Definition = function() {
@@ -198,7 +199,7 @@ $(function(){
 
   // Handle when a user clicks on the notebook links
   $(document).on('click', '.notebookMenuItem', function(event) {
-    if ($(event.target).hasClass('collapsed')) {
+    if (currentSelectedNodeID !== "") {
       Save_Open_Note()
       ShowHide_Note_Edit_Panel('hide')
     }
@@ -258,6 +259,13 @@ $(function(){
     notebookMngr.DB_Create_New_Note(notebookID, newNoteName)
     Build_Menu()
   })
+
+  // Generate a flash card test
+  //$('.btnGenerateFlashCardTest').on('click', function() {
+    // if we're going to generate the flash card test
+
+    // if we want to switch back to edit mode
+  //})
 
   tinymce.PluginManager.add('lowerMenu', function(editor, url) {
       // Add our word definition button
@@ -327,11 +335,6 @@ $(function(){
 
   tinymce.init({
     selector:'textarea',
-    // valid_elements : "a[href|target=_blank],strong/b,div,br," +
-    //   "p[class]," +
-    //   "ol[class]," +
-    //   "ul[class]," +
-    //   "li[class]",
     plugins: 'paste lowerMenu',
     paste_auto_cleanup_on_paste : true,
     paste_remove_styles: true,

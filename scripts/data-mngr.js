@@ -43,16 +43,18 @@ var Notebook_Mngr = function() {
 
       if (key.substring(0,dbCode_Notebooks.length) === dbCode_Notebooks) {
         var newNotebook = new this.objNotebook()
-        newNotebook.notebook_id = value.notebook_id;
+        newNotebook.notebook_id = value.notebook_id
         newNotebook.notebook_name = value.notebook_name;
-        return_array.push(newNotebook);
-
+        // get our list of notes to attach too
+        var noteList = this.DB_Note_List(value.notebook_id)
+        newNotebook.noteList = noteList
+        return_array.push(newNotebook)
       }
     }
     return return_array
   }
 
-  this.DB_Note_List = function() {
+  this.DB_Note_List = function(Notebook_ID) {
     var return_array = []
     for (var i = 0; i < localStorage.length; i++) {
       // get the key and value to work with
@@ -60,7 +62,7 @@ var Notebook_Mngr = function() {
       var value = localStorage.getItem(localStorage.key([i]));
       value = JSON.parse(value);
 
-      if (key.substring(0,dbCode_Notes.length) === dbCode_Notes) {
+      if (Notebook_ID === value.refNotebookId) {
         var newNote = new this.objNote()
         newNote.noteId = value.noteId;
         newNote.refNotebookId = value.refNotebookId;
