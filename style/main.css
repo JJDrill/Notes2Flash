@@ -1,3 +1,7 @@
+.navbar {
+  margin-bottom: 2px;
+}
+
 .page-header {
   margin-top: 0;
   margin-bottom: 0;
@@ -63,6 +67,22 @@
 }
 
 .clear {
-  /*clear:both;*/
   height: 55px;
+}
+
+.flashCardTestPanel {
+  margin: 5px;
+}
+
+.flashCardTestCard {
+  /*min-width: 300px;*/
+  width: 100%;
+  max-width: 300px;
+  min-height: 200px;
+  max-height: 300px;
+}
+
+.FlashCardRow {
+  padding-left: 1px;
+  padding-right: 1px;
 }

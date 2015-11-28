@@ -22,31 +22,18 @@
     <header>
       <nav class="navbar navbar-default">
         <div class="container-fluid">
-          <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <!-- <a class="navbar-brand" href="#">Brand</a> -->
-            <!-- <a class="navbar-brand" href="#">
-              <img alt="Brand" src="http://lorempixel.com/30/30/abstract/">
-            </a> -->
             <div class="page-header">
-              <h1>Notes2Flash <small class="tagLine">Better notes. Better memorization.</small></h1>
+              <h1>Notes2Flash <small class="hidden-xs tagLine">Better notes. Better memorization.</small></h1>
               </div>
           </div>
-
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <!-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="./account">Account</a></li>
-            </ul>
-          </div> -->
-          <!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
       </nav>
     </header>
     <main>
-      <div class="row">
+      <div class="row rowMenuBarAndNotesEdit">
         <!-- Notebook/Notes tree -->
-        <div class="col-md-3">
+        <div class="col-md-3 menuBar">
           <div class="panel panel-default">
             <div class="panel-heading clear">
               <h3 class="panel-title">
@@ -58,8 +45,7 @@
             </div>
             <div class="panel-body">
               <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
-
-
+              <!-- Handlebars template for our menu -->
               <script id="menu-template" type="text/x-handlebars-template">
                 {{#each this}}
                 <div class="panel panel-default notebookMenu">
@@ -95,54 +81,78 @@
                 {{/each}}
               </script>
 
-
             </div>
           </div>
         </div>
-        <!-- Note/Flash Card edit area -->
-        <div class="col-md-9">
-          <div class="panel panel-default notes-flash-panel">
-            <div class="panel-body notesBody">
-               <form>
-                 <div class="form-group">
-                   <textarea class="notesTextArea" name="notesText">
-                   </textarea>
-                   <div class="generateFlashCardTestPanel hidden">
-                     <h3>Please select the notes you would like to include in this test and when you're ready click the start button below.</h3>
-                     <br/>
-                     <button type="button" name="button">Start!</button>
-                     <div class="flashCardTestList"></div>
-                   </div>
-                 </div>
-               </form>
 
-               <!-- Flash Card Edit Area -->
-               <div class="flashCardPanel">
-                 <div class="panel panel-default text-center flashCardWindow">
-                   <div class="row panel-body collapse flashCardEditPanel">
-                     <div class="row">
-                       <div class="col-sm-12">
-                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardPrevious">&lt;</button>
-                         <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardForward">&gt;</button>
-                       </div>
+        <!-- Note/Flash Card edit area -->
+        <div class="col-md-9 notes-flash-panel">
+          <div class="panel panel-default">
+            <div class="panel-body notesBody">
+              <!-- Flash card test creation menu -->
+              <div class="form-group">
+               <textarea class="mceEditor notesTextArea" name="notesText">
+               </textarea>
+               <div class="generateFlashCardTestPanel hidden">
+                 <h3>Please select the notes you would like to include in this test and when you're ready click the start button below.</h3>
+                 <br/>
+                 <button class="btn btn-primary btn-sm btnStartFlashCardTest" type="button" name="button">Start!</button>
+                 <div class="flashCardTestList"></div>
+               </div>
+              </div>
+              <!-- Flash Card Edit Area -->
+              <div class="flashCardPanel">
+               <div class="panel panel-default text-center flashCardWindow">
+                 <div class="row panel-body collapse flashCardEditPanel">
+                   <div class="row">
+                     <div class="col-sm-12">
+                       <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardPrevious">&lt;</button>
+                       <button class="btn btn-default btn-xs flashEditButtons" type="button" name="btnFlashCardForward">&gt;</button>
                      </div>
-                     <div class="row">
-                       <div class="col-sm-5 col-sm-offset-1">
-                         <!-- Question Panel -->
-                         <div class="flashCard flashQuestion"></div>
-                       </div>
-                       <div class="col-sm-5">
-                         <!-- Answer Panel -->
-                         <div class="flashCard flashAnswer"></div>
-                       </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-sm-5 col-sm-offset-1">
+                       <!-- Question Panel -->
+                       <div class="flashCard flashQuestion"></div>
+                     </div>
+                     <div class="col-sm-5">
+                       <!-- Answer Panel -->
+                       <div class="flashCard flashAnswer"></div>
                      </div>
                    </div>
                  </div>
-               </div>  <!-- End flash edit panel -->
+               </div>
+              </div>
+              <!-- End flash edit panel -->
             </div>  <!-- End panel-body -->
           </div>
-        </div>
+        </div> <!-- End notes-flash-panel -->
+      </div> <!-- End notes menu bar and notes edit panel -->
 
+      <!-- Flash card test panel -->
+      <div class="row rowFlashCardTestPanel text-center hidden">
+        <div class="col-xs-12 col-xs-offset-1 flashCardTestPanel">
+          <!-- Flash cards row-->
+          <div class="row">
+            <div class="col-xs-12 FlashCardRow">
+              <textarea readonly class="flashCardTestCard flashCardTestQuestion" name="txtFlashCardTestQuestion"></textarea>
+                <textarea readonly class="flashCardTestCard flashCardTestAnswer" name="txtFlashCardTestAnswer"></textarea>
+            </div>
+          </div>
+          <!-- Flash card test menu -->
+          <div class="row">
+            <div class="col-xs-2">
+              <button class="btn btn-primary" type="button" name="btnExitFlashTest">Exit</button>
+            </div>
+            <div class="col-xs-8 text-center flashCardTestMenuButtons">
+              <button class="btn btn-default" type="button" name="btnTestShowAnswer">Show Answer</button>
+              <button class="btn btn-success hidden" type="button" name="btnTestAnswerCorrect">Correct</button>
+              <button class="btn btn-danger hidden" type="button" name="btnTestAnswerIncorrect">Wrong</button>
+            </div>
+            <div class="col-xs-2">
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Modal -->
       <!-- <div class="modal fade" id="confirmNotebookDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

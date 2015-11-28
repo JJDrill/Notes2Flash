@@ -171,7 +171,6 @@ $(function(){
 
   ShowHide_Note_Edit_Panel = function(action) {
     var editor_id = $(tinymce.activeEditor).attr('id');
-
     if (action === 'hide') {
       tinymce.get(editor_id).hide();
       $('#notesText')[0].hidden = true;
@@ -185,6 +184,19 @@ $(function(){
     var noteToUpdate = notebookMngr.DB_Get_Note(currentSelectedNodeID)
     noteToUpdate.notes = Get_Notes('string');
     noteBeingEdited = notebookMngr.DB_Save_Note(noteToUpdate)
+  }
+
+  Get_Selected_Notes_For_Test = function() {
+    var rtnArray = []
+    var testList = $('.flashSelectCheck:checked')
+    for (var i = 0; i < testList.length; i++) {
+      var rtnTestSelection = {
+        noteId: testList[i].parentElement.id,
+        noteName: testList[i].parentElement.innerText
+      }
+      rtnArray.push(rtnTestSelection)
+    }
+    return rtnArray;
   }
 
   // Flash card previous button
@@ -217,11 +229,10 @@ $(function(){
 
       // test
       $('.flashCardTestList').empty()
-      var testList = $('.flashSelectCheck:checked')
+      var testList = Get_Selected_Notes_For_Test()
       var stringToAppend = "<br/><h4>Notes included in this test:</h4><ul>"
       for (var i = 0; i < testList.length; i++) {
-        var noteName = testList[i].parentElement.innerText
-        stringToAppend += "<li>" + noteName + "</li>"
+        stringToAppend += "<li>" + testList[i].noteName + "</li>"
       }
       stringToAppend += "</ul>"
       $('.flashCardTestList').append(stringToAppend)
@@ -301,6 +312,72 @@ $(function(){
     }
   })
 
+  // Start flash card test button
+  $('.btnStartFlashCardTest').on('click', function() {
+    $('.rowMenuBarAndNotesEdit').addClass('hidden')
+    $('.rowFlashCardTestPanel').removeClass('hidden')
+    var testNotesArray = Get_Selected_Notes_For_Test()
+    flashCardTestAray = []
+    // get the flash cards for each note selected
+    for (var i = 0; i < testNotesArray.length; i++) {
+      var noteData = notebookMngr.DB_Get_Note(testNotesArray[i].noteId)
+      flashCardTestAray = flashCardTestAray.concat(noteData.flashCards);
+    }
+    flashCardTestIndex = 0;
+
+    // populate the first question
+    var question = flashCardTestAray[flashCardTestIndex].lineContent
+    $('.flashCardTestQuestion')[0].textContent = $(question).text()
+    $('.flashCardTestAnswer')[0].textContent = ""
+    // enable/diable buttons
+    $('button[name=btnTestShowAnswer]').removeClass('hidden')
+    $('button[name=btnTestAnswerCorrect]').addClass('hidden')
+    $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+  })
+
+  // Next flash card test card (correct/incorrect)
+  $('button[name=btnTestAnswerCorrect]').on('click', function() {
+      flashCardTestIndex += 1;
+
+    if (flashCardTestIndex < flashCardTestAray.length) {
+      // rest the answer field and set the new question
+      $('.flashCardTestAnswer')[0].textContent = ""
+      var question = flashCardTestAray[flashCardTestIndex].lineContent
+      $('.flashCardTestQuestion')[0].textContent = $(question).text()
+      // enable/diable buttons
+      $('button[name=btnTestShowAnswer]').removeClass('hidden')
+      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+    } else {
+      // end of the test!
+      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+    }
+  })
+
+  // Show answer card
+  $('button[name=btnTestShowAnswer]').on('click', function() {
+    var answers = ""
+    for (var i = 0; i < flashCardTestAray[flashCardTestIndex].answers.length; i++) {
+      flashCardTestAray[flashCardTestIndex].answers[i]
+      answers += flashCardTestAray[flashCardTestIndex].answers[i].lineContent + '\n'
+    }
+    $('.flashCardTestAnswer')[0].textContent = $(answers).text()
+
+    if (flashCardTestIndex <= flashCardTestAray.length) {
+      // enable/diable buttons
+      $('button[name=btnTestShowAnswer]').addClass('hidden')
+      $('button[name=btnTestAnswerCorrect]').removeClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').removeClass('hidden')
+    }
+  })
+
+  // Exit flash card test button
+  $('button[name=btnExitFlashTest]').on('click', function() {
+    $('.rowMenuBarAndNotesEdit').removeClass('hidden')
+    $('.rowFlashCardTestPanel').addClass('hidden')
+  })
+
   tinymce.PluginManager.add('lowerMenu', function(editor, url) {
       // Add our word definition button
       editor.addButton('wordDefinition', {
@@ -368,7 +445,9 @@ $(function(){
   });
 
   tinymce.init({
-    selector:'textarea',
+    //selector:'textarea',
+    mode : "textareas",
+    editor_selector : "mceEditor",
     plugins: 'paste lowerMenu',
     paste_auto_cleanup_on_paste : true,
     paste_remove_styles: true,
@@ -393,6 +472,8 @@ $(function(){
   var noteBeingEdited = new notebookMngr.objNote();
   var currentNodeFlashIndex = 0;
   var inFlashTestCreationMode = false;
+  var flashCardTestAray = [];
+  var flashCardTestIndex = 0;
 
   /*
   Insert some test data if they have an empty local storage
