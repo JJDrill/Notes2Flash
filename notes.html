@@ -48,14 +48,12 @@
         <!-- Notebook/Notes tree -->
         <div class="col-md-3">
           <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Notebooks
-                <span>
-                  <button class="btn pull-right glyphicon glyphicon-plus-sign addNotebook" type="button" name="button">
-                  </button>
-                  <!-- <button class="btn pull-right btnGenerateFlashCardTest" type="button" name="button">
-                  </button> -->
-                </span>
+            <div class="panel-heading clear">
+              <h3 class="panel-title">
+                <button class="btn btn-primary btn-sm pull-left btnModeSelect" type="button" name="button">Notebook Mode
+                </button>
+                <button class="btn pull-right glyphicon glyphicon-plus-sign addNotebook" type="button" name="button">
+                </button>
               </h3>
             </div>
             <div class="panel-body">
@@ -86,7 +84,10 @@
                   <div id="collapse{{@index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{@index}}">
                     <div class="list-group noteList">
                       {{#each noteList}}
-                      <button id="{{noteId}}" type="button" class="list-group-item linkOpenNote">{{noteName}}</button>
+                      <button id="{{noteId}}" type="button" class="list-group-item linkOpenNote">
+                        <input class="flashSelectCheck hidden" type="checkbox" name="">
+                        {{noteName}}
+                      </button>
                       {{/each}}
                     </div>
                   </div>
@@ -103,8 +104,16 @@
           <div class="panel panel-default notes-flash-panel">
             <div class="panel-body notesBody">
                <form>
-                 <textarea class="notesTextArea" name="notesText">
-                 </textarea>
+                 <div class="form-group">
+                   <textarea class="notesTextArea" name="notesText">
+                   </textarea>
+                   <div class="generateFlashCardTestPanel hidden">
+                     <h3>Please select the notes you would like to include in this test and when you're ready click the start button below.</h3>
+                     <br/>
+                     <button type="button" name="button">Start!</button>
+                     <div class="flashCardTestList"></div>
+                   </div>
+                 </div>
                </form>
 
                <!-- Flash Card Edit Area -->

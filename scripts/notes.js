@@ -206,17 +206,38 @@ $(function(){
   })
 
   // Handle user clicking on a Note to open it
+  // Or if in flash card test mode will selet the test
   $(document).on('click', '.linkOpenNote', function(e){
-    ShowHide_Note_Edit_Panel('show');
-    //save the content first if the node changed
-    if (currentSelectedNodeID !== e.currentTarget.id &&
-        currentSelectedNodeID !== "") {
-      Save_Open_Note()
+    if (inFlashTestCreationMode && e.target.children.length > 0) {
+      if (e.target.children[0].checked) {
+        e.target.children[0].checked = false
+      } else {
+        e.target.children[0].checked = true
+      }
+
+      // test
+      $('.flashCardTestList').empty()
+      var testList = $('.flashSelectCheck:checked')
+      var stringToAppend = "<br/><h4>Notes included in this test:</h4><ul>"
+      for (var i = 0; i < testList.length; i++) {
+        var noteName = testList[i].parentElement.innerText
+        stringToAppend += "<li>" + noteName + "</li>"
+      }
+      stringToAppend += "</ul>"
+      $('.flashCardTestList').append(stringToAppend)
+
+    } else if (!inFlashTestCreationMode) {
+      ShowHide_Note_Edit_Panel('show');
+      //save the content first if the node changed
+      if (currentSelectedNodeID !== e.currentTarget.id &&
+          currentSelectedNodeID !== "") {
+        Save_Open_Note()
+      }
+      //now open the new note
+      noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
+      Put_Notes(noteBeingEdited.notes)
+      currentSelectedNodeID = e.currentTarget.id;
     }
-    //now open the new note
-    noteBeingEdited = notebookMngr.DB_Get_Note(e.currentTarget.id)
-    Put_Notes(noteBeingEdited.notes)
-    currentSelectedNodeID = e.currentTarget.id;
   });
 
   // Add new notebook
@@ -261,11 +282,24 @@ $(function(){
   })
 
   // Generate a flash card test
-  //$('.btnGenerateFlashCardTest').on('click', function() {
-    // if we're going to generate the flash card test
-
-    // if we want to switch back to edit mode
-  //})
+  $('.btnModeSelect').on('click', function() {
+    if ($('.flashSelectCheck').hasClass('hidden')) {
+      inFlashTestCreationMode = true
+      $('.flashSelectCheck').removeClass('hidden')
+      ShowHide_Note_Edit_Panel('hide')
+      $('.generateFlashCardTestPanel').removeClass('hidden')
+      $('.btnModeSelect')[0].innerText = 'Flash Card Mode'
+      $('.addNotebook').hide()
+      $('.notebookOptions').hide()
+    } else {
+      inFlashTestCreationMode = false
+      $('.flashSelectCheck').addClass('hidden')
+      $('.generateFlashCardTestPanel').addClass('hidden')
+      $('.btnModeSelect')[0].innerText = 'Notebook Mode'
+      $('.addNotebook').show()
+      $('.notebookOptions').show()
+    }
+  })
 
   tinymce.PluginManager.add('lowerMenu', function(editor, url) {
       // Add our word definition button
@@ -358,6 +392,7 @@ $(function(){
   var currentSelectedNodeID = "";
   var noteBeingEdited = new notebookMngr.objNote();
   var currentNodeFlashIndex = 0;
+  var inFlashTestCreationMode = false;
 
   /*
   Insert some test data if they have an empty local storage

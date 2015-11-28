@@ -61,3 +61,8 @@
   padding-bottom: 0;
   height: 15px;
 }
+
+.clear {
+  /*clear:both;*/
+  height: 55px;
+}
