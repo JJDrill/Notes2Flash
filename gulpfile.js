@@ -14,7 +14,7 @@ gulp.task('cleanBuildDir', function () {
 
 gulp.task('compileJavascript', ['cleanBuildDir'], function() {
   return gulp.src('./scripts/*.js')
-        .pipe(babel())
+        .pipe(babel({compact: false}))
         .pipe(uglify())
         .pipe(gulp.dest('./build/scripts'))
 });
