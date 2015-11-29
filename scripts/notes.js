@@ -292,24 +292,27 @@ $(function(){
     Build_Menu()
   })
 
-  // Generate a flash card test
-  $('.btnModeSelect').on('click', function() {
-    if ($('.flashSelectCheck').hasClass('hidden')) {
-      inFlashTestCreationMode = true
-      $('.flashSelectCheck').removeClass('hidden')
-      ShowHide_Note_Edit_Panel('hide')
-      $('.generateFlashCardTestPanel').removeClass('hidden')
-      $('.btnModeSelect')[0].innerText = 'Flash Card Mode'
-      $('.addNotebook').hide()
-      $('.notebookOptions').hide()
-    } else {
-      inFlashTestCreationMode = false
-      $('.flashSelectCheck').addClass('hidden')
-      $('.generateFlashCardTestPanel').addClass('hidden')
-      $('.btnModeSelect')[0].innerText = 'Notebook Mode'
-      $('.addNotebook').show()
-      $('.notebookOptions').show()
-    }
+  // Button to select notebook mode
+  $('.btnModeNotebooks').on('click', function() {
+    inFlashTestCreationMode = false
+    $('.flashSelectCheck').addClass('hidden')
+    $('.generateFlashCardTestPanel').addClass('hidden')
+    $('.addNotebook').show()
+    $('.notebookOptions').show()
+    $('.btnModeNotebooks').prop('disabled', true);
+    $('.btnModeTest').prop('disabled', false);
+  })
+
+  // Button to select flash card test mode
+  $(".btnModeTest").on('click', function() {
+    inFlashTestCreationMode = true
+    $('.flashSelectCheck').removeClass('hidden')
+    ShowHide_Note_Edit_Panel('hide')
+    $('.generateFlashCardTestPanel').removeClass('hidden')
+    $('.addNotebook').hide()
+    $('.notebookOptions').hide()
+    $('.btnModeNotebooks').prop('disabled', false);
+    $('.btnModeTest').prop('disabled', true);
   })
 
   // Start flash card test button
@@ -536,4 +539,6 @@ $(function(){
   }
 
   Build_Menu();
+  $('.btnModeNotebooks').prop('disabled', true);
+  $('.btnModeTest').prop('disabled', false);
 });
