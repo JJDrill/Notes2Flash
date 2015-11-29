@@ -400,7 +400,7 @@ $(function(){
             var flashPanelState = ShowHide_Flash_Card_Edit();
             // set the button to change color when it's enabled
             if (flashPanelState === 'shown') {
-              event.target.style.backgroundColor = 'yellow'
+              event.target.style.backgroundColor = 'gray'
               tinymce.activeEditor.getBody().setAttribute('contenteditable', false)
             } else if (flashPanelState === 'hidden') {
               event.target.style.backgroundColor = ''
