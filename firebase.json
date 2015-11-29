@@ -1,0 +1,9 @@
+{
+  "firebase": "notes2flash",
+  "public": "build",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
