@@ -339,7 +339,8 @@ $(function(){
   })
 
   // Next flash card test card (correct/incorrect)
-  $('button[name=btnTestAnswerCorrect]').on('click', function() {
+  $('.btnTestAnswer').on('click', function() {
+    // TODO: Record the answer
       flashCardTestIndex += 1;
 
     if (flashCardTestIndex < flashCardTestAray.length) {
