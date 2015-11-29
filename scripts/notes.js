@@ -378,6 +378,22 @@ $(function(){
       // end of the test!
       $('button[name=btnTestAnswerCorrect]').addClass('hidden')
       $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+      $('.flashCardTestCards').hide()
+      $('.flashCardTestReporting').show()
+      var percentPassed = flashCardTestPassed / flashCardTestAray.length
+      var percentFailed = flashCardTestFailed.length / flashCardTestAray.length
+      //parseFloat(Math.round(num3 * 100) / 100).toFixed(2);
+      var reportData = {
+        totalPassed    : flashCardTestPassed,
+        percentPassed  : (percentPassed*100).toFixed(2),
+        totalFailed    : flashCardTestFailed.length,
+        percentFailed  : (percentFailed*100).toFixed(2),
+        totalQuestions : flashCardTestAray.length
+      }
+      var source    = $("#flash-card-results-template").html();
+      var template  = Handlebars.compile(source);
+      var html      = template(reportData);
+      $('.flashCardTestReporting').append(html)
     }
   })
 
