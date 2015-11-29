@@ -199,6 +199,11 @@ $(function(){
     return rtnArray;
   }
 
+  Update_Flash_Card_Test_Progress = function(percentPassed, percentFailed) {
+    $('.flashCardTestProgressSuccess').css('width', percentPassed+"%")
+    $('.flashCardTestProgressFailed').css('width', percentFailed+"%")
+  }
+
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
     Navigate_Flash_Cards('previous');
@@ -336,12 +341,29 @@ $(function(){
     $('button[name=btnTestShowAnswer]').removeClass('hidden')
     $('button[name=btnTestAnswerCorrect]').addClass('hidden')
     $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+    // reset our progress bar and results
+    Update_Flash_Card_Test_Progress(0, 0)
+    flashCardTestPassed = 0
+    flashCardTestFailed = []
   })
 
   // Next flash card test card (correct/incorrect)
-  $('.btnTestAnswer').on('click', function() {
-    // TODO: Record the answer
-      flashCardTestIndex += 1;
+  $('.btnTestAnswer').on('click', function(event) {
+    if ("btnTestAnswerCorrect" === event.target.name) {
+      flashCardTestPassed += 1
+    } else {
+      var failedQuestion = {
+        question: $('.flashCardTestQuestion')[0].textContent,
+        answer: $('.flashCardTestAnswer')[0].textContent
+      }
+      flashCardTestFailed.push(failedQuestion)
+    }
+    var percentPassed = flashCardTestPassed / flashCardTestAray.length
+    var percentFailed = flashCardTestFailed.length / flashCardTestAray.length
+    Update_Flash_Card_Test_Progress(percentPassed*100, percentFailed*100)
+
+    // go to the next question
+    flashCardTestIndex += 1;
 
     if (flashCardTestIndex < flashCardTestAray.length) {
       // rest the answer field and set the new question
@@ -478,6 +500,8 @@ $(function(){
   var inFlashTestCreationMode = false;
   var flashCardTestAray = [];
   var flashCardTestIndex = 0;
+  var flashCardTestPassed = 0;
+  var flashCardTestFailed = [];
 
   /*
   Insert some test data if they have an empty local storage
