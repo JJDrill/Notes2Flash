@@ -151,8 +151,10 @@
                 <textarea readonly class="flashCardTestCard flashCardTestAnswer" name="txtFlashCardTestAnswer"></textarea>
             </div>
             <div class="col-xs-8 col-xs-offset-2 flashCardTestReporting">
-              <!-- Handlebar template for the flash card test reporting -->
-              <script id="flash-card-results-template" type="text/x-handlebars-template">
+            </div>
+            <!-- Handlebar template for the flash card test reporting -->
+            <script id="flash-card-results-template" type="text/x-handlebars-template">
+              <div id="flashTestReportingTable">
                 <table class="table table-bordered">
                   <tr>
                     <td class="success">Total Passed</td>
@@ -169,7 +171,8 @@
                     <td>{{totalQuestions}}</td>
                   </tr>
                 </table>
-              </script>
+              </div>
+            </script>
             </div>
           </div>
           <!-- Flash card test menu -->
@@ -181,13 +184,12 @@
               <button class="btn btn-primary" type="button" name="btnTestShowAnswer">Show Answer</button>
               <button class="btn btn-success btnTestAnswer hidden" type="button" name="btnTestAnswerCorrect">Correct</button>
               <button class="btn btn-danger btnTestAnswer hidden" type="button" name="btnTestAnswerIncorrect">Wrong</button>
-              <button class="btn btn-primary hidden" type="button" name="btnTestStudyAgain">Study Again</button>
+              <button class="btn btn-primary hidden" type="button" name="btnTestStudyAgain">Run the Test Again</button>
             </div>
             <div class="col-xs-2">
             </div>
           </div> <!-- End Flash card test menu -->
         </div>
-      </div>
       <!-- Modal -->
       <!-- <div class="modal fade" id="confirmNotebookDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

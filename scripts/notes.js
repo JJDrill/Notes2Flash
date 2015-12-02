@@ -204,6 +204,94 @@ $(function(){
     $('.flashCardTestProgressFailed').css('width', percentFailed+"%")
   }
 
+  ShowHide_Flash_Card_Test_Panel = function(action) {
+    if (action === 'show') {
+      $('.rowFlashCardTestPanel').removeClass('hidden')
+    } else if (action === 'hide') {
+      $('.rowFlashCardTestPanel').addClass('hidden')
+    }
+  }
+
+  ShowHide_Flash_Card_Test_Cards = function(action) {
+    if (action === 'show') {
+      $('.flashCardTestCards').show()
+    } else if (action === 'hide') {
+      $('.flashCardTestCards').hide()
+    }
+  }
+
+  ShowHide_Flash_Card_Test_Buttons = function(action) {
+    if (action === 'showAnswer') {
+      $('button[name=btnTestShowAnswer]').removeClass('hidden')
+      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+
+    } else if (action === 'scoreAnswer') {
+      $('button[name=btnTestShowAnswer]').addClass('hidden')
+      $('button[name=btnTestAnswerCorrect]').removeClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').removeClass('hidden')
+
+    } else if (action === 'hideAll') {
+      $('button[name=btnTestShowAnswer]').addClass('hidden')
+      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
+      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+    }
+  }
+
+  ShowHide_Main_Note_Edit_Panel = function (action) {
+    if ('show' === action) {
+      $('.rowMenuBarAndNotesEdit').removeClass('hidden')
+    } else if ('hide' === action) {
+      $('.rowMenuBarAndNotesEdit').addClass('hidden')
+    } else {
+      console.log("ERROR: Unknown action for ShowHide_Main_Note_Edit_Panel");
+    }
+  }
+
+  ShowHide_Flash_Card_Test_Reporting = function(action) {
+    if (action === 'show') {
+      $('.flashCardTestReporting').removeClass('hidden')
+      $('button[name=btnTestStudyAgain]').removeClass('hidden')
+
+    } else if (action === 'hide') {
+      //every time we hide the results we will clear them
+      $('.flashCardTestReporting').empty()
+      $('.flashCardTestReporting').addClass('hidden')
+      $('button[name=btnTestStudyAgain]').addClass('hidden')
+    }
+  }
+
+  Start_Flash_Card_Test = function() {
+    ShowHide_Main_Note_Edit_Panel('hide')
+    ShowHide_Flash_Card_Test_Panel('show')
+    ShowHide_Flash_Card_Test_Cards('show')
+    ShowHide_Flash_Card_Test_Reporting('hide')
+    ShowHide_Flash_Card_Test_Buttons('showAnswer')
+
+    var testNotesArray = Get_Selected_Notes_For_Test()
+    flashCardTestAray = []
+    // get the flash cards for each note selected
+    for (var i = 0; i < testNotesArray.length; i++) {
+      var noteData = notebookMngr.DB_Get_Note(testNotesArray[i].noteId)
+      flashCardTestAray = flashCardTestAray.concat(noteData.flashCards);
+    }
+    flashCardTestIndex = 0;
+
+    // populate the first question
+    var question = flashCardTestAray[flashCardTestIndex].lineContent
+    $('.flashCardTestQuestion')[0].textContent = $(question).text()
+    $('.flashCardTestAnswer')[0].textContent = ""
+    Update_Flash_Card_Test_Progress(0, 0)
+    flashCardTestPassed = 0
+    flashCardTestFailed = []
+  }
+
+  Reset_Flash_Card_Test = function() {
+    $('.flashCardTestCards').show()
+    $('button[name=btnTestStudyAgain]').addClass('hidden')
+    ShowHide_Flash_Card_Test_Buttons('showAnswer')
+  }
+
   // Flash card previous button
   $('button[name=btnFlashCardPrevious]').on('click', function() {
     Navigate_Flash_Cards('previous');
@@ -322,29 +410,13 @@ $(function(){
 
   // Start flash card test button
   $('.btnStartFlashCardTest').on('click', function() {
-    $('.rowMenuBarAndNotesEdit').addClass('hidden')
-    $('.rowFlashCardTestPanel').removeClass('hidden')
-    var testNotesArray = Get_Selected_Notes_For_Test()
-    flashCardTestAray = []
-    // get the flash cards for each note selected
-    for (var i = 0; i < testNotesArray.length; i++) {
-      var noteData = notebookMngr.DB_Get_Note(testNotesArray[i].noteId)
-      flashCardTestAray = flashCardTestAray.concat(noteData.flashCards);
-    }
-    flashCardTestIndex = 0;
+    Start_Flash_Card_Test()
+  })
 
-    // populate the first question
-    var question = flashCardTestAray[flashCardTestIndex].lineContent
-    $('.flashCardTestQuestion')[0].textContent = $(question).text()
-    $('.flashCardTestAnswer')[0].textContent = ""
-    // enable/diable buttons
-    $('button[name=btnTestShowAnswer]').removeClass('hidden')
-    $('button[name=btnTestAnswerCorrect]').addClass('hidden')
-    $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
-    // reset our progress bar and results
-    Update_Flash_Card_Test_Progress(0, 0)
-    flashCardTestPassed = 0
-    flashCardTestFailed = []
+  // Restart the flash card test button
+  $('button[name=btnTestStudyAgain]').on('click', function() {
+    ShowHide_Flash_Card_Test_Reporting('hide')
+    Start_Flash_Card_Test()
   })
 
   // Next flash card test card (correct/incorrect)
@@ -370,19 +442,16 @@ $(function(){
       $('.flashCardTestAnswer')[0].textContent = ""
       var question = flashCardTestAray[flashCardTestIndex].lineContent
       $('.flashCardTestQuestion')[0].textContent = $(question).text()
-      // enable/diable buttons
-      $('button[name=btnTestShowAnswer]').removeClass('hidden')
-      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
-      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
+      ShowHide_Flash_Card_Test_Buttons('showAnswer')
+
     } else {
       // end of the test!
-      $('button[name=btnTestAnswerCorrect]').addClass('hidden')
-      $('button[name=btnTestAnswerIncorrect]').addClass('hidden')
-      $('.flashCardTestCards').hide()
-      $('.flashCardTestReporting').show()
+      ShowHide_Flash_Card_Test_Cards('hide')
+      ShowHide_Flash_Card_Test_Buttons('hideAll')
+
       var percentPassed = flashCardTestPassed / flashCardTestAray.length
       var percentFailed = flashCardTestFailed.length / flashCardTestAray.length
-      //parseFloat(Math.round(num3 * 100) / 100).toFixed(2);
+
       var reportData = {
         totalPassed    : flashCardTestPassed,
         percentPassed  : (percentPassed*100).toFixed(2),
@@ -393,7 +462,9 @@ $(function(){
       var source    = $("#flash-card-results-template").html();
       var template  = Handlebars.compile(source);
       var html      = template(reportData);
-      $('.flashCardTestReporting').append(html)
+      ShowHide_Flash_Card_Test_Reporting('show')
+      var testThis = $('.flashCardTestReporting')
+      testThis.append(html)
     }
   })
 
@@ -404,13 +475,10 @@ $(function(){
       flashCardTestAray[flashCardTestIndex].answers[i]
       answers += flashCardTestAray[flashCardTestIndex].answers[i].lineContent + '\n'
     }
-    $('.flashCardTestAnswer')[0].textContent = $(answers).text()
 
+  $('.flashCardTestAnswer')[0].textContent = $(answers).text()
     if (flashCardTestIndex <= flashCardTestAray.length) {
-      // enable/diable buttons
-      $('button[name=btnTestShowAnswer]').addClass('hidden')
-      $('button[name=btnTestAnswerCorrect]').removeClass('hidden')
-      $('button[name=btnTestAnswerIncorrect]').removeClass('hidden')
+      ShowHide_Flash_Card_Test_Buttons('scoreAnswer')
     }
   })
 
